@@ -5,6 +5,7 @@ import { RealtimeAgent, RealtimeSession, tool } from "@openai/agents/realtime";
 import { z } from "zod";
 import type { CutawayActions } from "@/lib/cutaway-client";
 import { REALTIME_MODEL } from "@/lib/realtime-config";
+import { repairFacts, selectedPageContext } from "@/lib/cutaway-agent-context";
 
 export function VoiceInput({
   actions,
@@ -21,6 +22,7 @@ export function VoiceInput({
   >("off");
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState("");
+  const [reply, setReply] = useState("");
 
   useEffect(
     () => () => {
@@ -58,7 +60,7 @@ export function VoiceInput({
       const agent = new RealtimeAgent({
         name: "Cutaway",
         instructions:
-          "You help repair the selected Fieldnote workshop app. Speak briefly, one useful sentence at a time. Read current state before acting. Use real experiment and repair tools; never invent results. A repair may be running in the background: do not start a second writer. Offer preview when verified. An apply request only opens the approval card; never claim it has deployed until state confirms success. Existing bookings must be preserved. A human reports the issue directly in the app; no workplace task is needed. Team handoff is optional only after successful Apply.",
+          "You help the studio operator repair Fieldnote. Answer in one plain-English sentence of at most 16 words unless more detail is requested. Explain what changes for customers; avoid SQL, paths, code and implementation jargon unless asked. Read current state with read_task before answering about a repair, then answer directly without another status call or spoken preamble. Use real experiment and repair tools; never invent results. Do not start a second repair while one is running. Offer preview when verified. An apply request only opens the approval card; only the operator's button can apply. Never claim deployment before state confirms it. Existing bookings must be preserved. No workplace task is needed to start; team handoff is optional after Apply.",
         tools: [
           tool({
             name: "read_task",
@@ -66,15 +68,16 @@ export function VoiceInput({
             parameters: z.object({}),
             execute: () =>
               safe(async () => ({
-                context: latest.current.context,
-                state: await latest.current.refresh(),
+                context: selectedPageContext(latest.current.context),
+                state: repairFacts(await latest.current.refresh()),
               })),
           }),
           tool({
             name: "run_experiment",
             description: "Reproduce booking behavior on disposable data.",
             parameters: z.object({}),
-            execute: () => safe(() => latest.current.experiment()),
+            execute: () =>
+              safe(async () => repairFacts(await latest.current.experiment())),
           }),
           tool({
             name: "start_repair",
@@ -82,7 +85,9 @@ export function VoiceInput({
               "Start one actual isolated source repair for the selected app.",
             parameters: z.object({ instruction: z.string() }),
             execute: ({ instruction }) =>
-              safe(() => latest.current.repair(instruction)),
+              safe(async () =>
+                repairFacts(await latest.current.repair(instruction)),
+              ),
           }),
           tool({
             name: "show_candidate",
@@ -112,6 +117,28 @@ export function VoiceInput({
         },
       });
       next.on("history_updated", (history) => {
+        const lastUserIndex = history.findLastIndex(
+          (item) => item.type === "message" && item.role === "user",
+        );
+        const assistant = history
+          .slice(lastUserIndex + 1)
+          .filter(
+            (item) => item.type === "message" && item.role === "assistant",
+          )
+          .at(-1);
+        if (assistant?.type === "message")
+          setReply(
+            assistant.content
+              .map((part) =>
+                "transcript" in part
+                  ? part.transcript || ""
+                  : "text" in part
+                    ? part.text
+                    : "",
+              )
+              .join(" ")
+              .trim(),
+          );
         const last = history
           .filter((item) => item.type === "message" && item.role === "user")
           .at(-1);
@@ -150,6 +177,7 @@ export function VoiceInput({
   function startTalking() {
     if (!session.current || disabled || status !== "ready") return;
     session.current.interrupt();
+    setReply("");
     session.current.transport.sendEvent({ type: "input_audio_buffer.clear" });
     session.current.mute(false);
     setStatus("listening");
@@ -203,6 +231,11 @@ export function VoiceInput({
         </button>
       )}
       {transcript && <p className="cutaway-voice-transcript">{transcript}</p>}
+      {reply && (
+        <p className="cutaway-voice-reply" aria-live="polite">
+          {reply}
+        </p>
+      )}
       {error && <p role="status">{error}</p>}
     </div>
   );

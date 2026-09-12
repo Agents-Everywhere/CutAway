@@ -1,33 +1,33 @@
 {
-  "runId": "27d3e923-7608-478b-96fd-cac128f46d92",
+  "runId": "72d41994-606c-4b35-8f33-bb242fa34a18",
   "stage": "applied",
-  "candidateDigest": "e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb",
-  "artifactDigest": "9b10ebdc4aac7c2ef6f4efde65e3b8ec0eb8360b04da00e18514d4f52d531cbf",
+  "candidateDigest": "02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d",
+  "artifactDigest": "3ed7cb98da3a63d6f6bd9f1436d2761d48b8f692396cfeee478cf16f20e41b22",
   "changedPaths": [
     "src/client/main.tsx",
     "src/server/reservations.ts"
   ],
   "evidence": {
-    "id": "two-for-one-f4312cb5-bf89-498c-b62d-e8de489c8d04",
-    "runId": "27d3e923-7608-478b-96fd-cac128f46d92",
+    "id": "two-for-one-2019143f-a619-4ddb-8cb5-bfd3c0e09d8e",
+    "runId": "72d41994-606c-4b35-8f33-bb242fa34a18",
     "revision": "3a7adce75f7f8c267c639608af25bd3f4ab7eddb89823fefe2233b83cf6e998f",
-    "startedAt": "2026-09-12T18:03:40.914Z",
-    "completedAt": "2026-09-12T18:03:42.882Z",
+    "startedAt": "2026-09-12T18:57:15.380Z",
+    "completedAt": "2026-09-12T18:57:16.829Z",
     "eventId": "pottery-saturday",
     "availableBefore": 1,
     "requests": [
       {
         "actor": "Avery Park",
-        "requestId": "b4268986-6f55-487f-a6c0-6bd3c3b8f671",
+        "requestId": "66f2ac58-f6b8-4a33-9bc5-0defa27d1917",
         "status": 201,
-        "reservationId": "3ebf596a-3757-49c0-aadf-173c454887cf",
+        "reservationId": "0e9ffebe-cc0e-40ce-830b-4c51488855e0",
         "result": "confirmed"
       },
       {
         "actor": "Sam Chen",
-        "requestId": "d97a1e83-f454-40b1-acf5-17ad4513ae56",
+        "requestId": "cd7c6b16-d635-4543-87a6-7e1f70a85f24",
         "status": 201,
-        "reservationId": "92eab6bf-3d4b-4f6b-850d-526ecc637362",
+        "reservationId": "c655dac3-051a-4d13-80ae-c99cc5291f50",
         "result": "confirmed"
       }
     ],
@@ -40,55 +40,55 @@
     "artifacts": []
   },
   "verification": {
-    "id": "44e739c2-2cd7-4c6e-9907-6cd9fc478f16",
-    "runId": "27d3e923-7608-478b-96fd-cac128f46d92",
-    "candidateDigest": "e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb",
-    "artifactDigest": "9b10ebdc4aac7c2ef6f4efde65e3b8ec0eb8360b04da00e18514d4f52d531cbf",
+    "id": "43c2011f-3f84-4371-b2bd-8dda32edb518",
+    "runId": "72d41994-606c-4b35-8f33-bb242fa34a18",
+    "candidateDigest": "02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d",
+    "artifactDigest": "3ed7cb98da3a63d6f6bd9f1436d2761d48b8f692396cfeee478cf16f20e41b22",
     "passed": true,
     "checks": [
       {
         "id": "two-for-one",
         "passed": true,
         "detail": "1 accepted, 1 sold out, 1 stored for 1 place.",
-        "evidenceId": "two-for-one-4756b947-e07f-4891-b083-2eb9a0b82c57"
+        "evidenceId": "two-for-one-2c12baf0-deb3-4e3b-9fac-0bbfcbe248bd"
       },
       {
         "id": "available-capacity",
         "passed": true,
         "detail": "3 accepted requests and 3 stored bookings for 3 places.",
-        "evidenceId": "three-for-three-003c35f6-2d38-4d71-8ed9-291a573377d5"
+        "evidenceId": "three-for-three-f652222a-ee5b-4fa7-bdf2-6e2aaf7fd11d"
       },
       {
         "id": "full-capacity",
         "passed": true,
         "detail": "Full workshop returned 409; 0 new rows.",
-        "evidenceId": "full-capacity-39e81246-f952-4cea-bf2d-6f44da91e534"
+        "evidenceId": "full-capacity-3015f73d-4be1-42e3-915d-a3165f6257d5"
       },
       {
         "id": "preserve-morgan",
         "passed": true,
         "detail": "Compared Morgan’s original ID, name, email, request ID and timestamp directly in SQLite after every scenario.",
-        "evidenceId": "two-for-one-4756b947-e07f-4891-b083-2eb9a0b82c57"
+        "evidenceId": "two-for-one-2c12baf0-deb3-4e3b-9fac-0bbfcbe248bd"
       }
     ]
   },
   "deployment": {
-    "runId": "27d3e923-7608-478b-96fd-cac128f46d92",
-    "releaseId": "e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb",
+    "runId": "72d41994-606c-4b35-8f33-bb242fa34a18",
+    "releaseId": "02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d",
     "previousReleaseId": "3a7adce75f7f8c267c639608af25bd3f4ab7eddb89823fefe2233b83cf6e998f",
-    "appliedAt": "2026-09-12T18:07:07.983Z",
+    "appliedAt": "2026-09-12T19:03:09.699Z",
     "healthy": true,
     "contextRestored": true,
     "existingRecordsPreserved": true,
     "scope": "local-demo"
   },
   "workOrderReceipt": {
-    "taskId": "9ff5f5fd-72ef-4b64-a51b-5d02a9008915",
-    "runId": "27d3e923-7608-478b-96fd-cac128f46d92",
-    "candidateDigest": "e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb",
-    "reportMarker": "Cutaway repair 27d3e923-7608-478b-96fd-cac128f46d92/e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb",
+    "taskId": "6e16a5d1-fcd1-40de-af1b-4c92011eede1",
+    "runId": "72d41994-606c-4b35-8f33-bb242fa34a18",
+    "candidateDigest": "02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d",
+    "reportMarker": "Cutaway repair 72d41994-606c-4b35-8f33-bb242fa34a18/02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d",
     "saved": true,
-    "readBackAt": "2026-09-12T18:07:20.842Z",
+    "readBackAt": "2026-09-12T19:03:23.866Z",
     "url": null
   }
 }

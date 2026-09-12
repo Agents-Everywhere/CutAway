@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { CopilotChat } from "@copilotkit/react-core/v2";
+import {
+  CopilotChat,
+  useAgent,
+  UseAgentUpdate,
+} from "@copilotkit/react-core/v2";
 import { z } from "zod";
 import type { HostMessage } from "cutaway-core";
 import {
@@ -45,6 +49,10 @@ function BrandMark() {
 
 export function CutawayWorkbench() {
   const actions = useCutaway();
+  const { agent } = useAgent({
+    agentId: "default",
+    updates: [UseAgentUpdate.OnRunStatusChanged],
+  });
   const { snapshot, surface, busy, connected } = actions;
   const context = actions.context?.selected
     ? actions.context
@@ -173,6 +181,16 @@ export function CutawayWorkbench() {
       </button>
 
       <section className="ca-target" aria-label="Fieldnote Studio application">
+        {surface === "preview" && (
+          <div className="ca-preview-banner" role="status">
+            <strong>
+              {applied
+                ? "Preview — testing the applied repair"
+                : "Preview — this change isn’t live yet"}
+            </strong>
+            <span>Bookings use separate data.</span>
+          </div>
+        )}
         <div
           className={`ca-frame-wrap ${selecting ? "ca-frame-wrap--selecting" : ""}`}
         >
@@ -205,7 +223,7 @@ export function CutawayWorkbench() {
       </section>
 
       <aside
-        className="ca-workbench"
+        className={`ca-workbench ${candidate ? "ca-workbench--has-candidate" : ""}`}
         aria-label="Cutaway workbench"
         hidden={!open}
       >
@@ -287,7 +305,7 @@ export function CutawayWorkbench() {
 
         <div className="ca-workbench-content">
           <section
-            className={`ca-context ${context?.selected ? "ca-context--selected" : ""}`}
+            className={`ca-context ${context?.selected ? "ca-context--selected" : ""} ${candidate ? "ca-context--compact" : ""}`}
             aria-label="Selected page context"
           >
             <span className="ca-context-icon" aria-hidden="true">
@@ -302,10 +320,12 @@ export function CutawayWorkbench() {
               <strong>
                 {context?.selected?.label ?? "Point to the problem"}
               </strong>
-              <p>
-                {context?.selected
-                  ? "Saturday pottery workshop"
-                  : "Select a part of the workshop, then tell Cutaway what needs fixing."}
+              <p className={candidate ? "ca-stage" : undefined}>
+                {candidate && snapshot
+                  ? stageLabels[snapshot.stage]
+                  : context?.selected
+                    ? "Saturday pottery workshop"
+                    : "Select a part of the workshop, then tell Cutaway what needs fixing."}
               </p>
             </div>
             {context?.selected && (
@@ -314,7 +334,7 @@ export function CutawayWorkbench() {
               </span>
             )}
           </section>
-          {snapshot && (
+          {snapshot && !candidate && (
             <div className="ca-stage" role="status">
               <span
                 className={
@@ -331,10 +351,10 @@ export function CutawayWorkbench() {
           )}
           {!snapshot?.evidence && (
             <div className="ca-start-note">
-              <h2>A little context. A real repair.</h2>
+              <h2>Investigate and fix a bug</h2>
               <p>
-                Cutaway can reproduce the issue, edit the source, and give you a
-                working preview before you apply it.
+                Cutaway changes the source, checks the repair, and gives you a
+                preview to approve before updating the app.
               </p>
               <button
                 type="button"
@@ -346,59 +366,82 @@ export function CutawayWorkbench() {
               </button>
             </div>
           )}
-          {snapshot?.evidence && (
+          {snapshot?.evidence && !candidate && (
             <EvidenceCard
               evidence={snapshot.evidence}
-              label={candidate ? "Before repair" : "Observed result"}
+              label="Observed result"
             />
           )}
+          {snapshot?.evidence && candidate && (
+            <details className="ca-previous-evidence">
+              <summary>
+                Before repair: {snapshot.evidence.successfulResponses}{" "}
+                confirmations for {snapshot.evidence.availableBefore} available{" "}
+                {snapshot.evidence.availableBefore === 1 ? "place" : "places"}
+              </summary>
+              <EvidenceCard
+                evidence={snapshot.evidence}
+                label="Before repair"
+              />
+            </details>
+          )}
           {candidate && (
-            <section className="ca-candidate">
-              <div className="ca-card-heading">
-                <span className="ca-eyebrow">The proposed change</span>
+            <details
+              className="ca-repair-disclosure"
+              open={!applied && !actions.approval}
+            >
+              <summary>
+                <span>
+                  {applied
+                    ? "Applied source & checks"
+                    : "Proposed source & checks"}
+                </span>
                 <span className="ca-chip">
                   {candidate.changedPaths.length}{" "}
                   {candidate.changedPaths.length === 1 ? "file" : "files"}
                 </span>
-              </div>
-              <h2>A repair you can try.</h2>
-              <p>{shortSummary}</p>
-              <details className="ca-source-details">
-                <summary>Repair details &amp; changed source</summary>
-                <p className="ca-source-summary">{candidate.summary}</p>
-                <ul>
-                  {candidate.changedPaths.map((path) => (
-                    <li key={path}>
-                      <code>{path}</code>
-                    </li>
-                  ))}
-                </ul>
-                <span className="ca-footnote">
-                  Candidate {candidate.digest.slice(0, 12)}
-                </span>
-              </details>
-              <VerificationCard verification={snapshot.verification} />
-              {!applied && !actions.approval && (
-                <div className="ca-candidate-actions">
-                  <button
-                    type="button"
-                    className="ca-button"
-                    disabled={busy}
-                    onClick={() => actions.showPreview()}
-                  >
-                    Try preview <span aria-hidden="true">↗</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="ca-button ca-button--primary"
-                    disabled={busy || !snapshot.verification?.passed}
-                    onClick={() => invoke(() => actions.prepareApproval(false))}
-                  >
-                    Review &amp; apply
-                  </button>
-                </div>
-              )}
-            </section>
+              </summary>
+              <section className="ca-candidate">
+                <p>{shortSummary}</p>
+                <details className="ca-source-details">
+                  <summary>Repair details &amp; changed source</summary>
+                  <p className="ca-source-summary">{candidate.summary}</p>
+                  <ul>
+                    {candidate.changedPaths.map((path) => (
+                      <li key={path}>
+                        <code>{path}</code>
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="ca-footnote">
+                    Candidate {candidate.digest.slice(0, 12)}
+                  </span>
+                </details>
+                <VerificationCard verification={snapshot.verification} />
+                {!applied && !actions.approval && (
+                  <div className="ca-candidate-actions">
+                    <button
+                      type="button"
+                      className="ca-button"
+                      disabled={busy}
+                      onClick={() => actions.showPreview()}
+                    >
+                      Try preview <span aria-hidden="true">↗</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="ca-button ca-button--primary"
+                      disabled={busy || !snapshot.verification?.passed}
+                      onClick={() =>
+                        invoke(() => actions.prepareApproval(false))
+                      }
+                    >
+                      Review &amp; apply
+                    </button>
+                  </div>
+                )}
+              </section>
+            </details>
           )}
           {actions.approval && (
             <section className="ca-approval">
@@ -468,9 +511,11 @@ export function CutawayWorkbench() {
                   <p className="ca-workorder-title">
                     {actions.workOrder.title}
                   </p>
-                  <span className="ca-footnote">
-                    Task {actions.workOrder.id}
-                  </span>
+                  {!snapshot.workOrderReceipt && (
+                    <span className="ca-footnote">
+                      Task {actions.workOrder.id}
+                    </span>
+                  )}
                   {actions.workOrder.url && (
                     <a
                       href={actions.workOrder.url}
@@ -512,7 +557,13 @@ export function CutawayWorkbench() {
         <div className="ca-conversation" ref={chatContainer}>
           <div className="ca-conversation-label">
             <span>Ask Cutaway</span>
-            <span>Knows your selected context</span>
+            <span role="status">
+              {agent.isRunning
+                ? snapshot?.stage === "idle"
+                  ? "Reading your request…"
+                  : "Responding…"
+                : "Knows your selected context"}
+            </span>
           </div>
           <CopilotChat
             agentId="default"

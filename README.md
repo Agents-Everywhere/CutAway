@@ -2,16 +2,17 @@
 
 **Fix the app without leaving it.**
 
-Cutaway is an embeddable repair assistant for applications you control. Fieldnote
-Studio is the first demo integration. Its branding and normal workflow remain
-primary; Cutaway opens from a small in-app launcher.
+Cutaway lets operators investigate and fix bugs inside applications they control,
+using text or voice. It changes source code, tests the repair, and asks for approval
+before applying it. Fieldnote Studio is the first demo integration; Cutaway opens
+from a small in-app launcher.
 
 An operator notices a bug while using the app, opens Cutaway, and asks for a
 repair. Try the change in Preview, then approve it for the live app while keeping
 existing reservations. Afterward, optionally share the verified result with the
 team by creating a report in Ambiguous.
 
-[Watch the 1:39 demo](assets/cutaway-demo.mp4) · [Demo walkthrough](DEMO.md) ·
+[Watch the 1:58 demo](assets/cutaway-demo.mp4) · [Demo walkthrough](DEMO.md) ·
 [Recorded run evidence](assets/cutaway-run.json)
 
 ![Fieldnote with Cutaway available to a signed-in operator](assets/cutaway-host.png)

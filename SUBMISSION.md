@@ -2,31 +2,30 @@
 
 **Cutaway — fix the app without leaving it.**
 
-The repair workflow and repository checks pass. The final continuous
-[video](assets/cutaway-demo.mp4) is **99 seconds (1:39)** and passed decoding,
-encoded-audio transcription and frame continuity checks. The demo presents
-Fieldnote as the studio’s live booking app, with Preview as the separate test
-environment. No public repository, video publication, social post or event
-submission is claimed here. See the [demo guide](DEMO.md) and
-[validation report](Cutaway-OpenSpec/references/validation-report.md).
+The final [video](assets/cutaway-demo.mp4) is **118 seconds (1:58)**. It shows a
+real typed repair request and voice follow-up, readable evidence, a preview,
+explicit Apply and a new Ambiguous report. Full decoding, encoded-audio
+transcription and frame review passed. The app view stays fixed, and every
+interaction plays at original speed; one labelled break omits 4m48s of worker
+waiting. Publication and event submission remain separate actions.
 
 ## Project description
 
-Cutaway is a coding agent embedded in the live applications people already use.
-An authorized operator points to a problem in that app, asks Cutaway to
-investigate, inspects a real source repair and independent checks, then tries a
-separate preview before approving an update to the live app. Only the preview
-uses separate test data; Apply updates the active app while preserving its
-existing records. The conversation stays beside the app while it restarts. After
-the repair, an optional Save report action creates an Ambiguous task with the
-verified outcome. There is no preseeded task or ticket prerequisite.
+Cutaway lets authorized operators investigate and fix bugs from inside the app
+they're using, by typing or speaking. It edits real source code, tests the
+repair outside the coding worker, offers a preview and asks for approval before
+applying the exact verified version. The conversation stays open while the app
+restarts against its existing data.
 
-Fieldnote Studio is the first integration. Its last pottery place can be booked
-twice because of a real concurrency bug. The demo reproduces that defect,
-repairs the source and preserves Morgan's existing reservation through Apply.
-Another app supplies its page context, source, independent checks and restart
-adapter. Fieldnote is the first integration; other applications need their own
-integration and behavior checks.
+In Fieldnote Studio, two customers can book the last pottery place. The operator
+selects the workshop's availability and asks Cutaway to reproduce and repair the
+bug without losing Morgan's booking. Preview uses separate test data; the update
+becomes live only after Apply. Afterward, the operator can create an Ambiguous
+task containing the verified result and read it back. No preseeded task is
+needed.
+
+Fieldnote is the first host integration. Other apps supply authorized access,
+page/record context, source, independent checks and a build/restart adapter.
 
 ## Who it helps and why the app matters
 
@@ -68,20 +67,20 @@ AI-assisted.
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Core Requirements & Functionality | Real selection → request → reproduction → source repair → checks → preview → Apply → restored app → optional new-task report readback                                |
 | Innovation & Theme Alignment      | The coding agent starts from the current app element and workshop; the host app remains the main surface                                                             |
-| Technical Execution & Integration | Isolated worker, independent HTTP/SQLite checks, separate preview data, exact-candidate approval and verified task persistence; 111 tests and production builds pass |
+| Technical Execution & Integration | Isolated worker, independent HTTP/SQLite checks, separate preview data, exact-candidate approval and verified task persistence; 113 tests and production builds pass |
 | Usefulness & Agentic Experience   | The operator can inspect and try a repair, decides when to apply it, keeps existing bookings and can share the result in a new team task                             |
 
-Final successful run: `27d3e923-7608-478b-96fd-cac128f46d92`. Applied candidate:
-`e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb`. After Apply,
-Save report created new Ambiguous task `9ff5f5fd-72ef-4b64-a51b-5d02a9008915`;
-its report was read back at `2026-09-12T18:07:20.842Z`. The provider returned no
+Final successful run: `72d41994-606c-4b35-8f33-bb242fa34a18`. Applied candidate:
+`02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d`. After Apply,
+Save report created new Ambiguous task `6e16a5d1-fcd1-40de-af1b-4c92011eede1`;
+its report was read back at `2026-09-12T19:03:23.866Z`. The provider returned no
 URL, so no task link is invented here.
 
 ## Repository readiness
 
 - [x] README explains setup, accounts, start/reset, architecture and
       limitations.
-- [x] `npm run verify:cutaway` passes strict types, 111 tests, lint and both
+- [x] `npm run verify:cutaway` passes strict types, 113 tests, lint and both
       production builds.
 - [x] Whole-change code and restart review returned GREEN.
 - [x] `.env`, local tokens, generated databases, candidate source and raw
@@ -104,25 +103,24 @@ URL, so no task link is invented here.
 - [x] Verify the visitor/operator access gate: five focused tests, actual denied
       requests, successful login and independent review.
 - [x] Include the captured real operator sign-in in the final edit.
-- [x] Validate the 99-second continuous video: full decoding, encoded narration
+- [x] Validate the 118-second readable video: full decoding, encoded narration
       and fixed-frame visual continuity passed.
 - [x] Deliver [assets/cutaway-demo.mp4](assets/cutaway-demo.mp4) and
       [curated run proof](assets/cutaway-run.json). Public publication remains a
       separate action.
 
-The picture is one browser recording with a fixed full-frame view: no shot
-changes, zooms, freezes or replays. Only the autonomous wait is labelled and
-accelerated; every app action and Apply remains at original speed. Narration
-uses a warmer, conversational stock voice.
+The camera uses a fixed full-frame view with no zoom, timelapse, replay or
+inserted freeze. One labelled editorial break skips inactive worker waiting.
+Coral provides the brighter stock narration, paced at 1.12× for the edit. The
+real voice exchange is unaltered: a stock macOS Samantha question is supplied
+only while actual push-to-talk is pressed, and the answer comes from the live
+OpenAI Realtime session using Marin. No human-recorded operator voice or
+subjective listening review is claimed.
 
-The scenario represents the studio’s live app. The recording runs locally with
-synthetic bookings; no public production hosting is claimed or required. The
-filmed request is typed. Voice was exercised separately through a real OpenAI
-connection using generated microphone audio. An earlier genuine voice connection
-also remained connected through Apply without a reconnect. The new continuous
-take uses a typed request and does not exercise voice. Video narration, if used,
-is generated, and shortened waits must be disclosed. No payment or email is sent
-by the booking fixture.
+The scenario represents the studio's live app. Execution is local and bookings
+are synthetic; no public production hosting, payment or customer email is
+claimed. The conventional workflow comparison concerns context reconstruction
+and handoffs, not a promise to remove a team's production review requirements.
 
 ## From repair to team follow-up
 

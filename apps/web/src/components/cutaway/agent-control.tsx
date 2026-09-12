@@ -8,6 +8,11 @@ import {
 } from "@copilotkit/react-core/v2";
 import { z } from "zod";
 import type { CutawayActions } from "@/lib/cutaway-client";
+import {
+  cutawayToolDescriptions,
+  repairFacts,
+  selectedPageContext,
+} from "@/lib/cutaway-agent-context";
 import { EvidenceCard, VerificationCard } from "./result-cards";
 
 async function result<T>(action: () => T | Promise<T>) {
@@ -31,9 +36,9 @@ export function AgentControl({ actions }: { actions: CutawayActions }) {
     () =>
       JSON.stringify({
         application: "Fieldnote Studio",
-        context,
+        context: selectedPageContext(context),
         surface,
-        snapshot,
+        repair: repairFacts(snapshot),
         controllerConnected: actions.connected,
       }),
     [context, surface, snapshot, actions.connected],
@@ -41,17 +46,19 @@ export function AgentControl({ actions }: { actions: CutawayActions }) {
 
   useAgentContext({
     description:
-      "Cutaway is the repair workbench beside the actual Fieldnote Studio app. This is live selected page context and controller evidence. Run experiments and request repairs using tools. Repairs are genuine source edits in an isolated worker. Counts and success claims must come from controller evidence. show_apply only displays an approval card; only the user's real Apply button can deploy. Preview uses separate data. The human reports a problem in this app; no workplace task is needed to start a repair. Only after successful Apply can the user optionally save a team handoff with the Save report to Ambiguous button. Never invent progress, outcomes or task links.",
+      "Live selected page context and measured repair facts. For an explicit repair request, call request_repair directly; it includes reproduction. The app refreshes progress automatically. Preview uses separate data; only the operator's Apply button updates Fieldnote. Optional Ambiguous handoff follows Apply.",
     value,
   });
 
   useFrontendTool(
     {
       name: "run_booking_experiment",
-      description:
-        "Run two real simultaneous booking attempts for the selected workshop using disposable test data. Read status after it finishes to inspect independent evidence.",
+      description: cutawayToolDescriptions.run_booking_experiment,
       parameters: z.object({}),
-      handler: () => result(() => latestActions.current.experiment()),
+      handler: () =>
+        result(async () =>
+          repairFacts(await latestActions.current.experiment()),
+        ),
     },
     [],
   );
@@ -59,11 +66,12 @@ export function AgentControl({ actions }: { actions: CutawayActions }) {
   useFrontendTool(
     {
       name: "request_repair",
-      description:
-        "Ask the isolated coding worker to repair the selected source using the user's instruction and actual experiment evidence. If needed, runs the baseline experiment first. Returns the accepted state; use read_repair_status to check progress. Does not apply changes.",
+      description: cutawayToolDescriptions.request_repair,
       parameters: z.object({ instruction: z.string().trim().min(1).max(4000) }),
       handler: ({ instruction }) =>
-        result(() => latestActions.current.repair(instruction)),
+        result(async () =>
+          repairFacts(await latestActions.current.repair(instruction)),
+        ),
     },
     [],
   );
@@ -71,10 +79,10 @@ export function AgentControl({ actions }: { actions: CutawayActions }) {
   useFrontendTool(
     {
       name: "read_repair_status",
-      description:
-        "Read current repair status, evidence, checks and the actual candidate or deployment receipt. Do not claim completion before this state confirms it.",
+      description: cutawayToolDescriptions.read_repair_status,
       parameters: z.object({}),
-      handler: () => result(() => latestActions.current.refresh()),
+      handler: () =>
+        result(async () => repairFacts(await latestActions.current.refresh())),
     },
     [],
   );
