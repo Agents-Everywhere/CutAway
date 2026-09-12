@@ -2,10 +2,12 @@
 
 **Cutaway — fix the app without leaving it.**
 
-The repair workflow and repository checks pass. The final [video](assets/cutaway-demo.mp4) is 107.8 seconds and validated.
-The demo presents Fieldnote as the studio’s live booking app, with Preview as
-the separate test environment. No public repository, video publication, social
-post or event submission is claimed here. See the [demo guide](DEMO.md) and
+The repair workflow and repository checks pass. The final continuous
+[video](assets/cutaway-demo.mp4) is **99 seconds (1:39)** and passed decoding,
+encoded-audio transcription and frame continuity checks. The demo presents
+Fieldnote as the studio’s live booking app, with Preview as the separate test
+environment. No public repository, video publication, social post or event
+submission is claimed here. See the [demo guide](DEMO.md) and
 [validation report](Cutaway-OpenSpec/references/validation-report.md).
 
 ## Project description
@@ -69,12 +71,11 @@ AI-assisted.
 | Technical Execution & Integration | Isolated worker, independent HTTP/SQLite checks, separate preview data, exact-candidate approval and verified task persistence; 111 tests and production builds pass |
 | Usefulness & Agentic Experience   | The operator can inspect and try a repair, decides when to apply it, keeps existing bookings and can share the result in a new team task                             |
 
-Final successful run: `a51579d0-af28-416c-a1cd-46640270a707`.
-Applied candidate: `24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733`.
-After Apply, Save report created new Ambiguous task
-`316ac4e9-2889-4406-853a-5ca2ee3843fe`; its report was read back at
-`2026-09-12T17:41:38.202Z`. The provider returned no URL, so no task link is
-invented here.
+Final successful run: `27d3e923-7608-478b-96fd-cac128f46d92`. Applied candidate:
+`e39cb22f1a36db9c9fe7b2a7c661aff98ae6736a700111bd4641ade39a2675bb`. After Apply,
+Save report created new Ambiguous task `9ff5f5fd-72ef-4b64-a51b-5d02a9008915`;
+its report was read back at `2026-09-12T18:07:20.842Z`. The provider returned no
+URL, so no task link is invented here.
 
 ## Repository readiness
 
@@ -103,24 +104,33 @@ invented here.
 - [x] Verify the visitor/operator access gate: five focused tests, actual denied
       requests, successful login and independent review.
 - [x] Include the captured real operator sign-in in the final edit.
-- [x] Final video is 107.8 seconds; full decoding, encoded-audio transcription and key-frame visual checks passed.
-- [x] Deliver [assets/cutaway-demo.mp4](assets/cutaway-demo.mp4) and [curated run proof](assets/cutaway-run.json). Public publication remains a separate action.
+- [x] Validate the 99-second continuous video: full decoding, encoded narration
+      and fixed-frame visual continuity passed.
+- [x] Deliver [assets/cutaway-demo.mp4](assets/cutaway-demo.mp4) and
+      [curated run proof](assets/cutaway-run.json). Public publication remains a
+      separate action.
+
+The picture is one browser recording with a fixed full-frame view: no shot
+changes, zooms, freezes or replays. Only the autonomous wait is labelled and
+accelerated; every app action and Apply remains at original speed. Narration
+uses a warmer, conversational stock voice.
 
 The scenario represents the studio’s live app. The recording runs locally with
 synthetic bookings; no public production hosting is claimed or required. The
 filmed request is typed. Voice was exercised separately through a real OpenAI
-connection using generated microphone audio. The final genuine voice connection
-also remained connected through Apply without a reconnect; the microphone was
-idle, and no speech is claimed for the final take. Video narration, if used, is
-generated, and shortened waits must be disclosed. No payment or email is sent by
-the booking fixture.
+connection using generated microphone audio. An earlier genuine voice connection
+also remained connected through Apply without a reconnect. The new continuous
+take uses a typed request and does not exercise voice. Video narration, if used,
+is generated, and shortened waits must be disclosed. No payment or email is sent
+by the booking fixture.
 
 ## From repair to team follow-up
 
 The verified Ambiguous report can feed a manager’s review, a booking check or an
 update for affected customers. This is the purpose of the existing report
-handoff: carry the repair evidence into the team’s work. The demo proves creation
-and readback of the task; those downstream actions are not shown executing.
+handoff: carry the repair evidence into the team’s work. The demo proves
+creation and readback of the task; those downstream actions are not shown
+executing.
 
 ## Publication and event checks
 

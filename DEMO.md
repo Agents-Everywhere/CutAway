@@ -12,10 +12,13 @@ The
 [two-minute script](Cutaway-OpenSpec/openspec/changes/build-cutaway-in-app-repair/demo-script.md)
 contains the narration and exact screen evidence for each beat. Use the
 [README](README.md#run-the-demo) to start the app and reset the synthetic
-fixture. The final [video](assets/cutaway-demo.mp4) is 107.8 seconds. The
-[run proof](assets/cutaway-run.json) records the applied candidate and new report
-task. Model/build waits are shortened visibly; the Apply segment retains its
-original speed.
+fixture. The replacement video uses one uninterrupted browser recording with a
+fixed full-frame view. Only the autonomous waiting interval is sped up, with a
+visible 14.2× label; sign-in, typing, preview, approval, Apply and saving remain
+at original speed. The final edit is 99.0 seconds (1:39). The final
+[video](assets/cutaway-demo.mp4) passed visual continuity, encoded-audio
+transcription and full decoding checks. The [run proof](assets/cutaway-run.json)
+records the applied candidate and new report task.
 
 ## What the viewer sees
 
@@ -62,15 +65,15 @@ repository.
 
 Show that distinction visually: open on visitor Fieldnote without the repair
 panel, sign in as an operator, invoke the small launcher, and keep Fieldnote
-visible during the repair. A closing caption explains the integration contract
-without showing fictional hosts.
+visible during the repair. The closing narration explains the reusable repair
+flow while the real app stays visible.
 
 ## Editorial review
 
 | Requested criterion              | How the script addresses it                                                                                                                                                                                              |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Is the technology clear?         | The opening identifies an embedded coding agent. Source edits, independent checks, preview and approved restart explain what it actually does.                                                                           |
-| Is it designed for other apps?   | Fieldnote is named as the first integration. The ending names what another app supplies without claiming turnkey support.                                                                                                |
+| Is it designed for other apps?   | Fieldnote is named as the first integration. The ending identifies the reusable repair flow; the technical explanation names each host integration requirement without claiming turnkey support.                         |
 | Is the operator workflow clear?  | An authorized operator signs in, selects, investigates, reviews, tries, approves and saves. Each action has an on-screen result. The app is live in the scenario; Preview is separate, and Apply updates the active app. |
 | Are integrations explained?      | Ambiguous appears only after Apply as an optional new task containing the verified report. The technical paragraph explains the model, shell and worker roles.                                                           |
 | Is it clear and free of AI slop? | Concrete actions replace slogans and vague benefits. “Two bookings for one place” states the bug; Morgan's reservation states what must survive. No manufactured reactions, testimonials or unsupported speed claims.    |
@@ -86,10 +89,10 @@ host app's own identity throughout.
 
 The saved Ambiguous report is the integration point for the team’s next actions.
 Its verified outcome can feed a manager’s review, a booking check or an update
-for affected customers. The closing scene shows **FROM REPAIR TO FOLLOW-UP ·
-Manager review · Booking check · Customer update** after the actual task receipt.
-The foundation is the working task creation and readback. The demo does not show
-the downstream review, check or customer update executing.
+for affected customers. The closing narration explains those workflow consumers
+over the actual task receipt, with the same continuous app view. The foundation
+is the working task creation and readback. The demo does not show the downstream
+review, check or customer update executing.
 
 ## Scope and delivery
 

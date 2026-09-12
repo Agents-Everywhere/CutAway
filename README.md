@@ -11,7 +11,7 @@ repair. Try the change in Preview, then approve it for the live app while keepin
 existing reservations. Afterward, optionally share the verified result with the
 team by creating a report in Ambiguous.
 
-[Watch the 1:48 demo](assets/cutaway-demo.mp4) · [Demo walkthrough](DEMO.md) ·
+[Watch the 1:39 demo](assets/cutaway-demo.mp4) · [Demo walkthrough](DEMO.md) ·
 [Recorded run evidence](assets/cutaway-run.json)
 
 ![Fieldnote with Cutaway available to a signed-in operator](assets/cutaway-host.png)
