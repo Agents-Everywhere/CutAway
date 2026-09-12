@@ -6,8 +6,8 @@
 [Inspect the recorded proof](assets/cutaway-run.json) ·
 [GitHub repository](https://github.com/Agents-Everywhere/CutAway)
 
-The repository is currently private. Public access and event submission remain
-pending; a private repository does not yet satisfy the public-repository deliverable.
+The repository and the included demo video are public. Event submission and the
+social post remain separate steps for the team.
 
 ## Project description
 
@@ -88,7 +88,7 @@ actions or replace a team's production review requirements.
 - [ ] Confirm the local event window, eligibility and deadline against the
       [organizer guidance](hackathon-rules.md).
 - [ ] Rehearse the repository quickstart from a clean clone.
-- [ ] Make the intended repository and video publicly accessible.
+- [x] Make the intended repository and video publicly accessible.
 - [ ] Publish the social post with the handles required by the local organizer.
 - [ ] Submit through the participant portal and retain its confirmation.
 
