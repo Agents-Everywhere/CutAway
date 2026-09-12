@@ -1,0 +1,511 @@
+:root {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  color: #202521;
+  background: #f6f4ef;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input {
+  font: inherit;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.site {
+  max-width: 1440px;
+  margin: auto;
+}
+.site-header {
+  height: 98px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dedfd6;
+  gap: 20px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 27px;
+  letter-spacing: -1.1px;
+  font-weight: 600;
+}
+.brand-mark {
+  font:
+    italic 45px Georgia,
+    serif;
+  color: #315c48;
+}
+.brand-subtitle {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 2.4px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.location {
+  font-size: 11px;
+  color: #6f786e;
+}
+.cutaway-open {
+  border: 1px solid #cbd1c5;
+  background: #eeeee5;
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  color: #315c48;
+  font-size: 20px;
+}
+.preview-notice {
+  padding: 12px 48px;
+  background: #e9eddc;
+  color: #3f513c;
+  font-size: 12px;
+  border-bottom: 1px solid #cfd7c0;
+}
+main {
+  padding: 29px 48px 42px;
+}
+.breadcrumb {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  color: #798073;
+  margin-bottom: 43px;
+}
+.breadcrumb span {
+  margin: 0 12px;
+  color: #aaa;
+}
+.workshop-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.24fr) minmax(300px, 0.85fr);
+  gap: 42px;
+  align-items: start;
+}
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.7px;
+  font-weight: 600;
+  color: #6d7b64;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.small-line {
+  display: inline-block;
+  width: 25px;
+  height: 1px;
+  background: #71826a;
+}
+h1 {
+  font:
+    normal clamp(36px, 4.6vw, 66px)/1.03 Georgia,
+    "Times New Roman",
+    serif;
+  letter-spacing: -2px;
+  margin: 20px 0 17px;
+}
+h1 em {
+  font-weight: normal;
+  color: #456449;
+}
+.intro {
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 430px;
+  color: #73786e;
+  margin: 0 0 26px;
+}
+.art-frame {
+  position: relative;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #e8dfcf;
+}
+.pottery-art {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.art-caption {
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  font-size: 7px;
+  letter-spacing: 1.4px;
+  color: #604f3d;
+}
+.story-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+.story-details > div {
+  position: relative;
+  padding-left: 26px;
+}
+.detail-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #647957;
+  font-size: 18px;
+}
+.story-details h3 {
+  font-size: 11px;
+  font-weight: 600;
+  margin: 3px 0 7px;
+}
+.story-details p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #7c8176;
+  margin: 0;
+}
+.booking-card {
+  background: #fffef9;
+  border: 1px solid #e2e1d7;
+  border-radius: 5px;
+  padding: 26px 27px 24px;
+  box-shadow: 0 5px 16px #26312404;
+}
+.card-eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #80866f;
+}
+.booking-card h2 {
+  font:
+    normal 30px/1.12 Georgia,
+    serif;
+  letter-spacing: -0.6px;
+  margin: 15px 0 25px;
+}
+.workshop-meta {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e7e7de;
+}
+.workshop-meta > div {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.workshop-meta span {
+  width: 39px;
+  flex-shrink: 0;
+  font-size: 8px;
+  letter-spacing: 1.1px;
+  color: #999d90;
+}
+.workshop-meta strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+.availability {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 18px 0;
+  font-size: 10px;
+}
+.availability strong {
+  font-weight: 600;
+  color: #805c27;
+}
+.availability > span:last-child {
+  margin-left: auto;
+  font-size: 9px;
+  color: #8d9183;
+  white-space: nowrap;
+}
+.availability-dot {
+  height: 6px;
+  width: 6px;
+  background: #bb944b;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.availability-dot.full {
+  background: #90957f;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  font-size: 10px;
+  font-weight: 500;
+  margin: 0 0 7px;
+}
+input {
+  height: 36px;
+  background: #fffefa;
+  border: 1px solid #dfe2d7;
+  border-radius: 3px;
+  padding: 0 11px;
+  color: #394336;
+  font-size: 11px;
+  margin-bottom: 15px;
+  width: 100%;
+  min-width: 0;
+}
+input::placeholder {
+  color: #a5a99a;
+}
+input:focus {
+  outline: 2px solid #315c4840;
+  border-color: #315c48;
+}
+.book-button {
+  height: 40px;
+  border: 0;
+  border-radius: 3px;
+  color: white;
+  background: #315c48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.book-button:hover:enabled {
+  background: #254936;
+}
+.book-button span {
+  font-size: 16px;
+}
+.form-note {
+  font-size: 8px;
+  color: #929885;
+  text-align: center;
+  margin: 10px 0 0;
+}
+.notice {
+  padding: 10px 12px;
+  border-radius: 3px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.notice.success {
+  background: #edf3e6;
+  color: #315c48;
+}
+.notice.error {
+  background: #f8eee1;
+  color: #855a34;
+}
+.reservations {
+  border-top: 1px solid #e6e7dc;
+  margin-top: 24px;
+  padding-top: 19px;
+}
+.reservation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.reservation-heading h3 {
+  font-size: 10px;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+.reservation-heading > span {
+  font-size: 9px;
+  color: #8c947e;
+}
+.reservation {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  background: #e9eadd;
+  border-radius: 50%;
+  font-size: 9px;
+  color: #677658;
+}
+.reservation > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.reservation strong {
+  font-size: 10px;
+  font-weight: 500;
+}
+.reservation > div > span {
+  font-size: 8px;
+  color: #969d8a;
+}
+.confirmed {
+  margin-left: auto;
+  color: #779768;
+  font-size: 12px;
+}
+footer {
+  border-top: 1px solid #dedfd6;
+  padding: 24px 48px;
+  display: flex;
+  justify-content: space-between;
+  color: #8d9580;
+  font-size: 9px;
+  gap: 15px;
+}
+footer > span:first-child {
+  font:
+    italic 13px Georgia,
+    serif;
+}
+footer > span:last-child {
+  font-size: 7px;
+  letter-spacing: 1.6px;
+}
+.cutaway-selecting [data-cutaway-id] {
+  cursor: crosshair;
+  outline: 1px dashed #638260;
+  outline-offset: 5px;
+}
+.cutaway-selecting [data-cutaway-id]:hover,
+[data-cutaway-selected] {
+  outline: 2px solid #638260;
+  outline-offset: 5px;
+  border-radius: 2px;
+}
+.cutaway-selecting [data-cutaway-id] * {
+  cursor: crosshair;
+}
+@media (min-width: 1450px) {
+  h1 {
+    font-size: 70px;
+  }
+}
+@media (max-width: 900px) {
+  .site-header {
+    padding: 0 28px;
+    height: 80px;
+  }
+  main {
+    padding: 25px 28px 30px;
+  }
+  .workshop-layout {
+    gap: 25px;
+    grid-template-columns: minmax(0, 1fr) minmax(265px, 0.9fr);
+  }
+  .booking-card {
+    padding: 24px 20px;
+  }
+  .breadcrumb {
+    margin-bottom: 30px;
+  }
+  .intro {
+    font-size: 12px;
+  }
+  .story-details {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 17px;
+  }
+  .location {
+    display: none;
+  }
+  footer {
+    padding: 22px 28px;
+  }
+  .preview-notice {
+    padding: 12px 28px;
+  }
+}
+@media (max-width: 650px) {
+  .workshop-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .site-header {
+    height: 76px;
+  }
+  .breadcrumb {
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: 48px;
+  }
+  .intro {
+    max-width: 100%;
+  }
+  .story-details {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .booking-card {
+    padding: 26px;
+  }
+  .art-frame {
+    max-height: 270px;
+  }
+  .pottery-art {
+    margin-top: -15px;
+  }
+  .workshop-meta strong {
+    font-size: 13px;
+  }
+  .availability {
+    font-size: 12px;
+  }
+  label {
+    font-size: 12px;
+  }
+  input {
+    font-size: 13px;
+    height: 42px;
+  }
+  .book-button {
+    height: 44px;
+    font-size: 13px;
+  }
+  .reservation strong {
+    font-size: 12px;
+  }
+  footer > span:last-child {
+    display: none;
+  }
+}

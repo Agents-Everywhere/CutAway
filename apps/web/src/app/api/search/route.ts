@@ -6,13 +6,19 @@
  * `searchWeb` capability the Slack and web surfaces use.
  */
 import { searchWeb } from "agent-core";
+import { withOperatorAuthorization } from "@/lib/server/cutaway/operator-auth";
 
-export async function POST(request: Request) {
+async function search(request: Request) {
   const body = (await request.json()) as { query?: unknown; results?: unknown };
   const query = typeof body.query === "string" ? body.query : "";
   if (!query) {
-    return Response.json({ error: "A query string is required." }, { status: 400 });
+    return Response.json(
+      { error: "A query string is required." },
+      { status: 400 },
+    );
   }
   const results = typeof body.results === "number" ? body.results : 5;
   return Response.json({ results: await searchWeb({ query, results }) });
 }
+
+export const POST = withOperatorAuthorization(search);

@@ -19,7 +19,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^4.1.0",
-    "@modelcontextprotocol/sdk": "^1.30.0"
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "cutaway-core": "*"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

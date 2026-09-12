@@ -13,3 +13,11 @@ apps/mobile/.expo/
 
 # Web approval and attempt metadata (not task storage)
 .data/
+
+# Cutaway local records, candidates and credentials
+.cutaway/
+artifacts/demo/
+
+.next-production/
+__pycache__/
+*.pyc

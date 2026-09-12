@@ -1,0 +1,94 @@
+{
+  "runId": "a51579d0-af28-416c-a1cd-46640270a707",
+  "stage": "applied",
+  "candidateDigest": "24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733",
+  "artifactDigest": "89a7260da25a4118331672d6477baa1bf3a6f62fb64b0cfa64352c488d6240c6",
+  "changedPaths": [
+    "src/client/main.tsx",
+    "src/server/reservations.ts"
+  ],
+  "evidence": {
+    "id": "two-for-one-c62b2093-44a8-43b6-b4a2-ca10615f1622",
+    "runId": "a51579d0-af28-416c-a1cd-46640270a707",
+    "revision": "3a7adce75f7f8c267c639608af25bd3f4ab7eddb89823fefe2233b83cf6e998f",
+    "startedAt": "2026-09-12T17:35:25.469Z",
+    "completedAt": "2026-09-12T17:35:26.783Z",
+    "eventId": "pottery-saturday",
+    "availableBefore": 1,
+    "requests": [
+      {
+        "actor": "Avery Park",
+        "requestId": "7e9eec6d-1aac-4adc-bed2-5695ae17b336",
+        "status": 201,
+        "reservationId": "d9ae4ea7-773c-45e1-9c31-d33e57222571",
+        "result": "confirmed"
+      },
+      {
+        "actor": "Sam Chen",
+        "requestId": "4f82d1f0-8df6-4eef-92ed-4d95195a8f6e",
+        "status": 201,
+        "reservationId": "50fa70a4-10ce-443b-9161-20a2c95fded7",
+        "result": "confirmed"
+      }
+    ],
+    "rowsBefore": 1,
+    "rowsAfter": 3,
+    "successfulResponses": 2,
+    "newReservations": 2,
+    "existingRecordsPreserved": true,
+    "invariant": "violated",
+    "artifacts": []
+  },
+  "verification": {
+    "id": "974320e8-df46-4111-8ec2-815a8b850db3",
+    "runId": "a51579d0-af28-416c-a1cd-46640270a707",
+    "candidateDigest": "24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733",
+    "artifactDigest": "89a7260da25a4118331672d6477baa1bf3a6f62fb64b0cfa64352c488d6240c6",
+    "passed": true,
+    "checks": [
+      {
+        "id": "two-for-one",
+        "passed": true,
+        "detail": "1 accepted, 1 sold out, 1 stored for 1 place.",
+        "evidenceId": "two-for-one-94abaf80-f434-4deb-812f-ff0c95784398"
+      },
+      {
+        "id": "available-capacity",
+        "passed": true,
+        "detail": "3 accepted requests and 3 stored bookings for 3 places.",
+        "evidenceId": "three-for-three-380b5c8d-4169-402d-b3eb-77cbc0f5bac2"
+      },
+      {
+        "id": "full-capacity",
+        "passed": true,
+        "detail": "Full workshop returned 409; 0 new rows.",
+        "evidenceId": "full-capacity-551bec49-a971-4d57-8b74-8c800d4c7143"
+      },
+      {
+        "id": "preserve-morgan",
+        "passed": true,
+        "detail": "Compared Morgan’s original ID, name, email, request ID and timestamp directly in SQLite after every scenario.",
+        "evidenceId": "two-for-one-94abaf80-f434-4deb-812f-ff0c95784398"
+      }
+    ]
+  },
+  "deployment": {
+    "runId": "a51579d0-af28-416c-a1cd-46640270a707",
+    "releaseId": "24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733",
+    "previousReleaseId": "3a7adce75f7f8c267c639608af25bd3f4ab7eddb89823fefe2233b83cf6e998f",
+    "appliedAt": "2026-09-12T17:41:25.686Z",
+    "healthy": true,
+    "contextRestored": true,
+    "existingRecordsPreserved": true,
+    "scope": "local-demo"
+  },
+  "workOrderReceipt": {
+    "taskId": "316ac4e9-2889-4406-853a-5ca2ee3843fe",
+    "runId": "a51579d0-af28-416c-a1cd-46640270a707",
+    "candidateDigest": "24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733",
+    "reportMarker": "Cutaway repair a51579d0-af28-416c-a1cd-46640270a707/24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733",
+    "saved": true,
+    "readBackAt": "2026-09-12T17:41:38.202Z",
+    "url": null
+  }
+}

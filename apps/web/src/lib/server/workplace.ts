@@ -151,6 +151,22 @@ export class AmbiguousWorkplace implements Workplace {
       );
     return record;
   }
+  async updateDescription(
+    id: string,
+    description: string,
+    beforeWrite: () => Promise<void>,
+  ) {
+    z.uuid().parse(id);
+    const result = z
+      .object({ task: z.unknown() })
+      .parse(await this.call("update_task", { id, description }, beforeWrite));
+    const record = task(result.task);
+    if (record.id !== id)
+      throw new FollowupError(
+        "Ambiguous returned a different task after updating.",
+      );
+    return record;
+  }
   async list(marker: string) {
     const records: WorkplaceTask[] = [];
     const seen = new Set<string>();
@@ -186,7 +202,7 @@ export class AmbiguousWorkplace implements Workplace {
 }
 
 export function configuredWorkplace(apiKey = process.env.AMBIGUOUS_API_KEY): {
-  workplace: Workplace;
+  workplace: AmbiguousWorkplace;
   close(): Promise<void>;
 } {
   if (!apiKey?.trim())

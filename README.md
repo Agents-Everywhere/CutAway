@@ -1,3 +1,128 @@
+# Cutaway
+
+**Fix the app without leaving it.**
+
+Cutaway is an embeddable repair assistant for applications you control. Fieldnote
+Studio is the first demo integration. Its branding and normal workflow remain
+primary; Cutaway opens from a small in-app launcher.
+
+An operator notices a bug while using the app, opens Cutaway, and asks for a
+repair. Try the change in Preview, then approve it for the live app while keeping
+existing reservations. Afterward, optionally share the verified result with the
+team by creating a report in Ambiguous.
+
+[Watch the 1:48 demo](assets/cutaway-demo.mp4) · [Demo walkthrough](DEMO.md) ·
+[Recorded run evidence](assets/cutaway-run.json)
+
+![Fieldnote with Cutaway available to a signed-in operator](assets/cutaway-host.png)
+
+## Run the demo
+
+Node **22** and Docker are required. Use the checked-in `.nvmrc`; on the prepared
+Mac, `export PATH="/opt/homebrew/opt/node@22/bin:$PATH"` selects the installed version.
+
+```bash
+npm ci
+cp .env.example .env
+# Configure the provider keys and an operator password described below.
+docker build -f infra/codex-worker/Dockerfile -t cutaway-codex-worker infra/codex-worker
+npm run dev:cutaway
+```
+
+Open **http://127.0.0.1:3100** for the customer view. Staff sign in at
+**http://127.0.0.1:3100/operator** to use Cutaway in the same Fieldnote app.
+Existing setups should preserve their `.env` instead of copying over it. Keys
+stay server-side and out of Git:
+
+| Setting                                                 | Use                                                                          |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `OPENROUTER_API_KEY`                                    | Chat and the isolated coding worker                                          |
+| `MODEL`, `CODEX_MODEL`                                  | Defaults: `meta/muse-spark-1.3-contributor`                                  |
+| `OPENROUTER_REASONING_EFFORT`, `CODEX_REASONING_EFFORT` | `xhigh`; the selected model's `max` tier requires additional provider access |
+| `OPENAI_API_KEY`                                        | OpenAI Realtime voice; typing works independently                            |
+| `AMBIGUOUS_API_KEY`                                     | Optional: share the completed repair with a workspace you control            |
+| `CUTAWAY_OPERATOR_PASSWORD`                             | Required: staff access to Cutaway; choose a private password                 |
+
+## Try the workflow
+
+1. Sign in as an operator, open Cutaway, and select Fieldnote's availability indicator.
+2. Ask it to reproduce the last-place double booking, repair it and preserve existing bookings. Type or connect voice and hold to talk.
+3. Inspect the real experiment, source change summary and independent checks.
+4. Try the candidate using **Preview**. Its bookings use a separate test database.
+5. Review and explicitly approve **Apply**. Only Fieldnote restarts; Morgan's existing reservation remains.
+6. Optionally choose **Save report to Ambiguous**. A task is created with the measured result, and the receipt appears after actual readback.
+
+`npm run demo:reset` restores the synthetic defective baseline and creates a fresh
+runtime context after work has settled. It resets demo data; Apply preserves data.
+Stop the dev command with Ctrl+C to stop its owned services.
+
+## Check the code
+
+```bash
+npm run verify:cutaway
+```
+
+This runs strict workspace types, tests, lint and production builds. Independent
+booking checks use real HTTP requests and inspect SQLite directly: two customers
+for one place, three for three places, full-capacity rejection and exact preservation
+of the existing record. A frontend-only or reject-all workaround cannot pass.
+
+## How it works
+
+The Next.js/CopilotKit shell holds context, conversation and voice. A small local
+controller starts a fresh Codex SDK worker in Docker with only candidate source
+mounted for editing. The controller owns checks, preview data, the verified source
+identity and target restart. The worker cannot Apply or access the active database,
+provider work-order credentials, this implementation spec or protected checks.
+
+- [Fieldnote source and endpoints](examples/fieldnote/README.md)
+- [Independent checks](packages/cutaway-checks/README.md)
+- [Design and limits](Cutaway-OpenSpec/openspec/changes/build-cutaway-in-app-repair/design.md)
+- [Demo script](Cutaway-OpenSpec/openspec/changes/build-cutaway-in-app-repair/demo-script.md)
+- [Implementation progress](Cutaway-OpenSpec/openspec/changes/build-cutaway-in-app-repair/tasks.md)
+
+## Integrate another app
+
+Supply the host app's source, page/record context, independent behavior checks,
+and build/start/restart adapter. The current integration is a web app using a
+small postMessage connector; it can be adapted to other web frameworks. Cutaway's
+shell, conversation, coding worker and approval flow are the reusable layer.
+Fieldnote-specific booking fixtures/checks are the sample adapter, not a claim that
+all apps are booking apps. Other applications need their own integration and checks;
+this repository currently demonstrates one host end to end.
+
+Use the host app's authentication and operator permissions to decide who can
+access Cutaway. This demo uses a shared staff password and signed, expiring
+HttpOnly sessions. The server checks the session on every AI and repair API;
+hiding the launcher alone is not the access control. Visitors can book workshops
+without receiving the Cutaway workbench or its model provider.
+
+## Demo scope and limitations
+
+One local app and repair at a time. Fieldnote deliberately contains a real booking
+race and synthetic records/provider delay. The runtime fixes source; there is no
+prewritten patch or fixed-mode switch. Preview data is separate from active data.
+There is no hosting, migration, automatic rollback or production-readiness claim.
+A failed check prevents Apply; a failed external report remains labelled unsaved.
+
+Docker Desktop requires a documented seccomp compatibility adjustment for Codex's
+nested workspace sandbox. The container still drops capabilities, uses a read-only
+image and restricted mounts, and the SDK keeps workspace/network confinement.
+This is a controlled local demo, not a hostile-code hosting service.
+
+## Attribution
+
+Built on CopilotKit's MIT-licensed Agents, Everywhere starter at
+`86f547d74e8bd32e047226b0e1fb862cca02a5c7`. Inherited pieces include the web runtime,
+page-context/tool integration, model adapter, voice SDK connection and approved
+workplace adapter. Cutaway adds the Fieldnote app, repair controller/worker,
+independent booking checks, preview/apply workflow and repair-report handoff.
+The original [LICENSE](LICENSE) is preserved. Source implementation and runtime
+repairs are AI-assisted. Event-build history must reflect actual commits and work.
+
+<details>
+<summary>Inherited starter documentation and sponsor setup</summary>
+
 <div align="center">
 
 # Agents, Everywhere Hackathon Starter Kit
@@ -47,10 +172,10 @@ prepare SUBMISSION.md, distinguishing inherited code from our event work.
 
 Use the team's maintained setup prompts in the same coding-agent session, with this checkout as the project root. Choose one app first; setup should adapt that app rather than scaffold a second starter over it.
 
-| Your starting point | Onboarding path |
-|---|---|
-| Slack template | Run `npm run channel:setup -- --no-clipboard`, then have your agent follow the prompt it prints. This installs the current `channels-setup` skill; the command itself does not create a Channel or sign you in. Tell the agent to connect **Slack** using `apps/channel` and read its bundled `build-channels-agent` skill. |
-| Web or React Native template | The existing model-provider setup runs without Intelligence. To add managed conversations with Rich Threads and other Intelligence capabilities, use the prompt below for the chosen app. |
+| Your starting point          | Onboarding path                                                                                                                                                                                                                                                                                                             |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Slack template               | Run `npm run channel:setup -- --no-clipboard`, then have your agent follow the prompt it prints. This installs the current `channels-setup` skill; the command itself does not create a Channel or sign you in. Tell the agent to connect **Slack** using `apps/channel` and read its bundled `build-channels-agent` skill. |
+| Web or React Native template | The existing model-provider setup runs without Intelligence. To add managed conversations with Rich Threads and other Intelligence capabilities, use the prompt below for the chosen app.                                                                                                                                   |
 
 **Connect the selected app to CopilotKit Intelligence:**
 
@@ -118,33 +243,35 @@ Want another surface pattern? The web app also includes a voice route, and the s
 
 Give your agent these files before it starts coding:
 
-| File | What it provides |
-|---|---|
-| [hackathon-overview.md](hackathon-overview.md) | The challenge, four surfaces, and official judging criteria |
-| [hackathon-rules.md](hackathon-rules.md) | Build eligibility, inherited code, and required deliverables |
-| [using-sponsor-tools.md](using-sponsor-tools.md) | Every sponsor featured in this kit: access, authentication, configuration, and a first working call |
-| [AGENTS.md](AGENTS.md) | Repository conventions and verification commands |
-| [Channels skill](.agents/skills/build-channels-agent/SKILL.md) | Verified Channels APIs for the Slack template |
+| File                                                           | What it provides                                                                                    |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [hackathon-overview.md](hackathon-overview.md)                 | The challenge, four surfaces, and official judging criteria                                         |
+| [hackathon-rules.md](hackathon-rules.md)                       | Build eligibility, inherited code, and required deliverables                                        |
+| [using-sponsor-tools.md](using-sponsor-tools.md)               | Every sponsor featured in this kit: access, authentication, configuration, and a first working call |
+| [AGENTS.md](AGENTS.md)                                         | Repository conventions and verification commands                                                    |
+| [Channels skill](.agents/skills/build-channels-agent/SKILL.md) | Verified Channels APIs for the Slack template                                                       |
 
 The app READMEs provide launch commands, files to customize, and a concrete result to check. Start with one template and add a second surface only if it helps your user.
 
 ## Resources
 
-| Need | Go here |
-|---|---|
-| Event details, deadline, and judging | [Find your city](https://aitinkerers.org/hackathons/global/agents-everywhere), then open its participant portal and handbook |
-| OpenAI agent development | [Agents SDK quickstart](https://openai.github.io/openai-agents-js/guides/quickstart/) |
-| OpenRouter access and model choice | [Quickstart](https://openrouter.ai/docs/quickstart) · [Keys](https://openrouter.ai/keys) · [Model catalog](https://openrouter.ai/models) · [Model switching](dev-docs/model-switching.md) |
-| CopilotKit app development | [Docs](https://docs.copilotkit.ai/) · [Tools and context](dev-docs/tools-and-context.md) · [Discord channel for technical questions](https://discord.com/channels/1122926057641742418/1548038338848489532) |
-| CopilotKit Channels | [Channels guide](https://copilotkit.ai/channels-guide.md) · [Screenshot walkthrough](dev-docs/channels-sdk-walkthrough/README.md) · [OpenTag example app](https://github.com/CopilotKit/OpenTag) |
-| Exa quickstart | [Search API guide](https://exa.ai/docs/reference/search-api-guide) · [Kit setup](using-sponsor-tools.md#exa) |
-| Auth0 API authorization | [Node API](https://auth0.com/docs/quickstart/backend/nodejs) · [Kit setup](using-sponsor-tools.md#auth0) |
-| Ambiguous AI quickstart | [Developer guide](https://www.ambiguous.ai/llms.txt) · [Kit setup](using-sponsor-tools.md#ambiguous-ai) |
-| Rehearse and debug | [Demo prompts](dev-docs/demo-prompts.md) · [Troubleshooting](dev-docs/troubleshooting.md) |
-| Prepare your entry | [Submission checklist](SUBMISSION.md) |
+| Need                                 | Go here                                                                                                                                                                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event details, deadline, and judging | [Find your city](https://aitinkerers.org/hackathons/global/agents-everywhere), then open its participant portal and handbook                                                                               |
+| OpenAI agent development             | [Agents SDK quickstart](https://openai.github.io/openai-agents-js/guides/quickstart/)                                                                                                                      |
+| OpenRouter access and model choice   | [Quickstart](https://openrouter.ai/docs/quickstart) · [Keys](https://openrouter.ai/keys) · [Model catalog](https://openrouter.ai/models) · [Model switching](dev-docs/model-switching.md)                  |
+| CopilotKit app development           | [Docs](https://docs.copilotkit.ai/) · [Tools and context](dev-docs/tools-and-context.md) · [Discord channel for technical questions](https://discord.com/channels/1122926057641742418/1548038338848489532) |
+| CopilotKit Channels                  | [Channels guide](https://copilotkit.ai/channels-guide.md) · [Screenshot walkthrough](dev-docs/channels-sdk-walkthrough/README.md) · [OpenTag example app](https://github.com/CopilotKit/OpenTag)           |
+| Exa quickstart                       | [Search API guide](https://exa.ai/docs/reference/search-api-guide) · [Kit setup](using-sponsor-tools.md#exa)                                                                                               |
+| Auth0 API authorization              | [Node API](https://auth0.com/docs/quickstart/backend/nodejs) · [Kit setup](using-sponsor-tools.md#auth0)                                                                                                   |
+| Ambiguous AI quickstart              | [Developer guide](https://www.ambiguous.ai/llms.txt) · [Kit setup](using-sponsor-tools.md#ambiguous-ai)                                                                                                    |
+| Rehearse and debug                   | [Demo prompts](dev-docs/demo-prompts.md) · [Troubleshooting](dev-docs/troubleshooting.md)                                                                                                                  |
+| Prepare your entry                   | [Submission checklist](SUBMISSION.md)                                                                                                                                                                      |
 
 For credit redemption instructions, choose your city on the [global event page](https://aitinkerers.org/hackathons/global/agents-everywhere) and check its participant portal's **Credits & Offers** section.
 
 For technical questions during the event, check your city's participant portal and ask your local organizers.
 
 For the Slack/web workspaces, `npm run verify` runs typechecks and offline tests without credentials. The mobile app has its own install, tests, typecheck, and Metro export checks under `apps/mobile`. Each app reports missing configuration when the relevant integration is used. Live sponsor calls and platform delivery require your accounts. See [developer docs](dev-docs/README.md) for detailed setup and deployment.
+
+</details>

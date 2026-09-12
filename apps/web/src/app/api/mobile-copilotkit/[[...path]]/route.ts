@@ -5,6 +5,7 @@ import {
 } from "@copilotkit/runtime/v2";
 import { makeAgent } from "agent-core";
 import { MOBILE_FINANCE_PROMPT } from "agent-core/mobile-finance-prompt";
+import { withOperatorAuthorization } from "@/lib/server/cutaway/operator-auth";
 
 const runtime = new CopilotRuntime({
   agents: () => ({
@@ -20,6 +21,9 @@ const app = createCopilotHonoHandler({
   basePath: "/api/mobile-copilotkit",
 });
 
-export const GET = app.fetch;
-export const POST = app.fetch;
-export const OPTIONS = app.fetch;
+const handler = withOperatorAuthorization((request: Request) =>
+  app.fetch(request),
+);
+export const GET = handler;
+export const POST = handler;
+export const OPTIONS = handler;

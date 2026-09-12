@@ -1,0 +1,86 @@
+.operator-page {
+  min-height: 100dvh;
+  padding: 36px clamp(24px, 6vw, 96px);
+  background: #f8f5ee;
+  color: #253e34;
+  font-family: Arial, sans-serif;
+}
+.operator-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  font:
+    48px Georgia,
+    serif;
+}
+.operator-brand span {
+  font-size: 29px;
+  letter-spacing: -0.04em;
+}
+.operator-card {
+  width: min(100%, 440px);
+  margin: 12vh auto 0;
+}
+.operator-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  font-weight: bold;
+}
+.operator-card h1 {
+  font:
+    44px/1.1 Georgia,
+    serif;
+  letter-spacing: -0.04em;
+  margin: 18px 0;
+}
+.operator-card p {
+  color: #647269;
+  line-height: 1.65;
+}
+.operator-card form {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+}
+.operator-card label {
+  font-weight: bold;
+  font-size: 12px;
+}
+.operator-card input[type="password"] {
+  width: 100%;
+  border: 1px solid #cecfc2;
+  border-radius: 6px;
+  background: #fffdf7;
+  padding: 13px;
+  color: #253e34;
+}
+.operator-primary,
+.operator-secondary {
+  display: block;
+  border: 0;
+  border-radius: 6px;
+  padding: 13px 20px;
+  text-decoration: none;
+  text-align: center;
+}
+.operator-primary {
+  background: #2d5744;
+  color: #fffdf7;
+}
+.operator-secondary {
+  background: #e6e9df;
+  color: #253e34;
+}
+.operator-back {
+  display: inline-block;
+  margin-top: 26px;
+  color: #526b5b;
+  font-size: 12px;
+}
+.operator-card .operator-error {
+  color: #a03e31;
+  margin: 0;
+  font-size: 12px;
+}

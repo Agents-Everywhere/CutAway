@@ -4,25 +4,36 @@ import { DEFAULT_MODEL } from "./model-meta";
 
 function canonicalProvider(provider: string) {
   const normalized = provider.trim().toLowerCase();
-  return normalized === "gemini" || normalized === "google-gemini" ? "google" : normalized;
+  return normalized === "gemini" || normalized === "google-gemini"
+    ? "google"
+    : normalized;
 }
 
 export function resolveModel() {
   const model = (process.env.MODEL || DEFAULT_MODEL).trim();
   const firstSeparator = model.search(/[:/]/);
-  const candidatePrefix = firstSeparator >= 0 ? canonicalProvider(model.slice(0, firstSeparator)) : undefined;
+  const candidatePrefix =
+    firstSeparator >= 0
+      ? canonicalProvider(model.slice(0, firstSeparator))
+      : undefined;
   // A colon in a bare model name can introduce a variant, such as ':free'.
   // Only supported provider prefixes use colon syntax; publishers use '/'.
-  const separator = firstSeparator >= 0 && (model[firstSeparator] === "/" ||
-    ["openai", "openrouter", "anthropic", "google"].includes(candidatePrefix || ""))
-    ? firstSeparator : -1;
+  const separator =
+    firstSeparator >= 0 &&
+    (model[firstSeparator] === "/" ||
+      ["openai", "openrouter", "anthropic", "google"].includes(
+        candidatePrefix || "",
+      ))
+      ? firstSeparator
+      : -1;
   const prefix = separator >= 0 ? candidatePrefix : undefined;
   const modelId = separator >= 0 ? model.slice(separator + 1).trim() : model;
   if (!modelId) {
     throw new Error("MODEL must include a non-empty model identifier.");
   }
   // Preserve the original automatic router switch for existing .env files.
-  const provider = canonicalProvider(process.env.MODEL_PROVIDER || "") ||
+  const provider =
+    canonicalProvider(process.env.MODEL_PROVIDER || "") ||
     (process.env.OPENROUTER_API_KEY ? "openrouter" : prefix || "openai");
   const keyNames: { [provider: string]: string | undefined } = {
     openai: "OPENAI_API_KEY",
@@ -30,12 +41,18 @@ export function resolveModel() {
     anthropic: "ANTHROPIC_API_KEY",
     google: "GOOGLE_API_KEY",
   };
-  const keyName = Object.hasOwn(keyNames, provider) ? keyNames[provider] : undefined;
+  const keyName = Object.hasOwn(keyNames, provider)
+    ? keyNames[provider]
+    : undefined;
   if (!keyName) {
-    throw new Error(`Unsupported model provider '${provider}'. Set MODEL_PROVIDER to openai, openrouter, anthropic, or google.`);
+    throw new Error(
+      `Unsupported model provider '${provider}'. Set MODEL_PROVIDER to openai, openrouter, anthropic, or google.`,
+    );
   }
   if (provider !== "openrouter" && prefix && prefix !== provider) {
-    throw new Error(`MODEL provider '${prefix}' does not match MODEL_PROVIDER '${provider}'.`);
+    throw new Error(
+      `MODEL provider '${prefix}' does not match MODEL_PROVIDER '${provider}'.`,
+    );
   }
   const apiKey = process.env[keyName];
   if (!apiKey || apiKey === "stub-replace-me") {
@@ -46,6 +63,18 @@ export function resolveModel() {
     const openRouter = createOpenAI({
       baseURL: "https://openrouter.ai/api/v1",
       apiKey,
+      fetch: async (url, options) => {
+        const effort = process.env.OPENROUTER_REASONING_EFFORT;
+        if (effort && typeof options?.body === "string") {
+          const body = JSON.parse(options.body) as Record<string, unknown>;
+          body.reasoning = { effort };
+          return globalThis.fetch(url, {
+            ...options,
+            body: JSON.stringify(body),
+          });
+        }
+        return globalThis.fetch(url, options);
+      },
       headers: {
         "HTTP-Referer": process.env.PUBLIC_APP_URL ?? "https://aitinkerers.org",
         "X-OpenRouter-Title": process.env.APP_TITLE ?? "Agents, Everywhere",

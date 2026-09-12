@@ -1,0 +1,17 @@
+{
+  "name": "cutaway-controller",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=../../.env --import tsx src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/*.test.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.3",
+    "cutaway-core": "*",
+    "cutaway-checks": "*",
+    "zod": "^4.1.0"
+  }
+}

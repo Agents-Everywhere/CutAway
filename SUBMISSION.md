@@ -1,74 +1,146 @@
-# Submission checklist
+# Cutaway submission notes
 
-Choose your city on the [global event page](https://aitinkerers.org/hackathons/global/agents-everywhere). Use that city's participant portal for the submission deadline and published judging criteria, and its handbook for eligibility and required deliverables. See [hackathon-rules.md](hackathon-rules.md) for the agent-readable summary.
+**Cutaway — fix the app without leaving it.**
 
-## Build eligibility
+The repair workflow and repository checks pass. The final [video](assets/cutaway-demo.mp4) is 107.8 seconds and validated.
+The demo presents Fieldnote as the studio’s live booking app, with Preview as
+the separate test environment. No public repository, video publication, social
+post or event submission is claimed here. See the [demo guide](DEMO.md) and
+[validation report](Cutaway-OpenSpec/references/validation-report.md).
 
-- [ ] Our submitted project is a net-new build created during the official hackathon period
-- [ ] Its core functionality was built during the event; we are not resubmitting or extending a pre-existing project and entering it as new
-- [ ] We identify inherited templates, libraries, prompts, components, and starter code separately from our event work
+## Project description
 
-**What we inherited**
-<!-- Include this starter kit and any reused examples. -->
+Cutaway is a coding agent embedded in the live applications people already use.
+An authorized operator points to a problem in that app, asks Cutaway to
+investigate, inspects a real source repair and independent checks, then tries a
+separate preview before approving an update to the live app. Only the preview
+uses separate test data; Apply updates the active app while preserving its
+existing records. The conversation stays beside the app while it restarts. After
+the repair, an optional Save report action creates an Ambiguous task with the
+verified outcome. There is no preseeded task or ticket prerequisite.
 
-**What we built during the hackathon**
-<!-- Describe the new core interaction and point to its implementation. Running the supplied incident demo alone does not establish a new project. -->
+Fieldnote Studio is the first integration. Its last pottery place can be booked
+twice because of a real concurrency bug. The demo reproduces that defect,
+repairs the source and preserves Morgan's existing reservation through Apply.
+Another app supplies its page context, source, independent checks and restart
+adapter. Fieldnote is the first integration; other applications need their own
+integration and behavior checks.
 
-## Title and description
+## Who it helps and why the app matters
 
-**What you built**
-<!-- Explain the complete interaction your demo shows. -->
+Visitors use Fieldnote without an active repair panel. An authorized operator
+signs in to use Cutaway inside the same app. The demo adds a simple
+password/signed-session gate; another host should use its own identity and
+operator permissions. Five focused access tests, actual request checks and an
+independent substantive review passed.
 
-**Who it is for**
-<!-- Name a person in a concrete situation. -->
+The operator is responsible for workshop bookings and wants to stop promising
+the same place twice. Selecting the actual availability indicator gives Cutaway
+the workshop, element and source binding. The operator discovers the problem in
+the app and supplies the repair request directly. Preview and approval happen
+beside the app the operator already recognizes, with the existing customer
+record visible before and after repair.
 
-**Why the context matters**
-<!-- What did the agent know or do because it lived in this surface? -->
+## Technology and attribution
 
-**Sponsor technologies used**
-<!-- Name the tools you actually used and the visible contribution of each. -->
+| Technology                          | Contribution                                                             |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| CopilotKit                          | Existing web shell, page context, agent tools and controlled UI          |
+| OpenRouter                          | Configured Muse model for chat and runtime coding                        |
+| OpenAI                              | Codex SDK worker integration and separate Realtime voice                 |
+| Ambiguous AI                        | Optional task creation after repair, with a verified report and readback |
+| React/Next.js, Vite, SQLite, Docker | Application UI, target build/data and isolated execution                 |
+
+Inherited infrastructure comes from CopilotKit's MIT-licensed Agents, Everywhere
+starter at `86f547d74e8bd32e047226b0e1fb862cca02a5c7`: model adapters, web
+runtime/context patterns, voice connection and approved workplace adapter.
+Cutaway adds [Fieldnote](examples/fieldnote/README.md), the repair
+controller/worker, protected booking checks, candidate preview, explicit Apply,
+restart/context restoration and the repair-report handoff. The original
+[LICENSE](LICENSE) remains. Source implementation and runtime repairs are
+AI-assisted.
 
 ## Evidence for the judging criteria
 
-Judges score each of the four official criteria from 1–5. This checklist helps you gather evidence; it does not guarantee a score. A working starter is a foundation for your own project.
+| Official criterion                | Cutaway evidence                                                                                                                                                     |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core Requirements & Functionality | Real selection → request → reproduction → source repair → checks → preview → Apply → restored app → optional new-task report readback                                |
+| Innovation & Theme Alignment      | The coding agent starts from the current app element and workshop; the host app remains the main surface                                                             |
+| Technical Execution & Integration | Isolated worker, independent HTTP/SQLite checks, separate preview data, exact-candidate approval and verified task persistence; 111 tests and production builds pass |
+| Usefulness & Agentic Experience   | The operator can inspect and try a repair, decides when to apply it, keeps existing bookings and can share the result in a new team task                             |
 
-| Official criterion | Show in your project and demo |
-|---|---|
-| Core Requirements & Functionality | Run one complete workflow in the intended environment, from user request through tools to a verified result. Repeat it with live integrations; offline tests alone do not prove the deployed flow. |
-| Innovation & Theme Alignment | Show the surrounding context before the prompt and explain the original interaction it enables. Compare with the context removed: what value would a standalone chatbox lose? |
-| Technical Execution & Integration | Show how tools, data, and the environment connect. Demonstrate a relevant failure or cancellation path and explain recovery, state persistence, and integration limits. |
-| Usefulness & Agentic Experience | Identify the user and problem, show a meaningful action in the surface, and demonstrate clear feedback and appropriate user control. Explain what work the agent saves. |
+Final successful run: `a51579d0-af28-416c-a1cd-46640270a707`.
+Applied candidate: `24f0dd7a14ff02ea248f6f4dd128aafb8fd6bf0b8a3b804f079234a33c040733`.
+After Apply, Save report created new Ambiguous task
+`316ac4e9-2889-4406-853a-5ca2ee3843fe`; its report was read back at
+`2026-09-12T17:41:38.202Z`. The provider returned no URL, so no task link is
+invented here.
 
-- [ ] We can point to visible evidence for every criterion
-- [ ] We distinguish live services, sample data, session-only state, and standalone recipes
-- [ ] Sponsor technologies contribute to the workflow; their count is not a judging criterion
+## Repository readiness
 
-## Public repository
+- [x] README explains setup, accounts, start/reset, architecture and
+      limitations.
+- [x] `npm run verify:cutaway` passes strict types, 111 tests, lint and both
+      production builds.
+- [x] Whole-change code and restart review returned GREEN.
+- [x] `.env`, local tokens, generated databases, candidate source and raw
+      recordings are ignored.
+- [x] Synthetic data, local update scope and other-app integration work are
+      described.
+- [ ] Rehearse the published repository quickstart from a clean clone.
+- [ ] Publish the intended project repository and record its public URL.
 
-- [ ] A new participant can run the quickstart from a clean clone
-- [ ] The README lists the credentials and separate processes required
-- [ ] `npm run verify` passes; optional recipe checks pass if used
-- [ ] `.env`, tokens, generated traces with sensitive data, and account secrets are excluded
-- [ ] Sample data, session-only state, and unimplemented integrations are clearly labeled
+## Demo delivery
 
-## Two-minute demo video
+- [x] Capture the final workflow: bug discovered in Fieldnote, real source
+      repair, then optional new Ambiguous task creation and readback.
+- [x] Show Fieldnote before opening Cutaway; preserve the distinction between
+      host and assistant.
+- [x] Show operator review, usable preview, explicit Apply and the resulting
+      update to the running app.
+- [x] Prepare plain-language narration and proof shots covering the five
+      requested review criteria.
+- [x] Verify the visitor/operator access gate: five focused tests, actual denied
+      requests, successful login and independent review.
+- [x] Include the captured real operator sign-in in the final edit.
+- [x] Final video is 107.8 seconds; full decoding, encoded-audio transcription and key-frame visual checks passed.
+- [x] Deliver [assets/cutaway-demo.mp4](assets/cutaway-demo.mp4) and [curated run proof](assets/cutaway-run.json). Public publication remains a separate action.
 
-- [ ] Show the surface and existing context before the prompt
-- [ ] Demonstrate one complete interaction
-- [ ] Show a visible result: an actual record, local state change, or research source links
-- [ ] If showing an approval, distinguish the decision from execution and demonstrate the resulting behavior
-- [ ] State which sponsor technologies made the interaction possible
-- [ ] Keep the video within the event's limit and check audio
+The scenario represents the studio’s live app. The recording runs locally with
+synthetic bookings; no public production hosting is claimed or required. The
+filmed request is typed. Voice was exercised separately through a real OpenAI
+connection using generated microphone audio. The final genuine voice connection
+also remained connected through Apply without a reconnect; the microphone was
+idle, and no speech is claimed for the final take. Video narration, if used, is
+generated, and shortened waits must be disclosed. No payment or email is sent by
+the booking fixture.
 
-See [demo prompts](dev-docs/demo-prompts.md) for a reproducible incident workflow.
+## From repair to team follow-up
 
-## Social post and final submission
+The verified Ambiguous report can feed a manager’s review, a booking check or an
+update for affected customers. This is the purpose of the existing report
+handoff: carry the repair evidence into the team’s work. The demo proves creation
+and readback of the task; those downstream actions are not shown executing.
 
-- [ ] Follow the organizer's posting and sponsor-tagging instructions
-- [ ] Link the public repository and video
-- [ ] Credit the sponsors you used and applicable local partners
-- [ ] Check the live integration once more before recording or submitting
-- [ ] Inspect the repository, video and screenshots for secrets
+## Publication and event checks
 
-Prepare the post and submission for a human to publish; running the starter kit
-does not publish either automatically.
+The team must confirm its city-specific event window and eligibility against the
+[organizer guidance](hackathon-rules.md). The implementation notes distinguish
+inherited code from Cutaway work; they do not establish the organizer's official
+build window.
+
+- [ ] Confirm build eligibility and the local submission deadline.
+- [ ] Inspect final public files and the movie for secrets before publishing.
+- [ ] Publish the repository and video, then insert their actual links.
+- [ ] Add sponsor handles required by the local organizer and publish the social
+      post.
+- [ ] Submit through the participant portal and retain its confirmation.
+
+Draft social copy, to accompany the real repository and video links:
+
+> We built Cutaway for Agents, Everywhere: a coding agent inside an app you
+> already use. In our Fieldnote demo, it reproduces a double booking, edits the
+> source, runs independent checks and offers a preview. The operator approves
+> the update to the live app; existing bookings survive. After the repair, the
+> operator can create an Ambiguous task with the verified result. Built with
+> CopilotKit, OpenRouter and OpenAI, with Ambiguous for the work-order handoff.
