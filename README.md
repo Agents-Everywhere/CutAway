@@ -2,27 +2,32 @@
 
 **Fix the app without leaving it.**
 
-Cutaway lets operators investigate and fix bugs inside applications they control,
-using text or voice. It changes source code, tests the repair, and asks for approval
-before applying it. Fieldnote Studio is the first demo integration; Cutaway opens
-from a small in-app launcher.
+Cutaway lets authorized operators investigate and fix bugs **inside the app
+they're using**, by typing or speaking. It edits real source code, runs independent
+checks, offers a working Preview and asks for approval before applying the exact
+tested version. Customers use the normal app; Cutaway is an operator tool.
 
-An operator notices a bug while using the app, opens Cutaway, and asks for a
-repair. Try the change in Preview, then approve it for the live app while keeping
-existing reservations. Afterward, optionally share the verified result with the
-team by creating a report in Ambiguous.
+Fieldnote Studio is the first host integration. Its operator notices that two
+customers can book the last pottery place, selects availability and asks Cutaway
+to fix it without losing Morgan's existing reservation. The request starts in the
+app. After a successful repair, an optional Ambiguous task carries the verified
+result into the team's work.
 
 [Watch the 1:58 demo](assets/cutaway-demo.mp4) · [Demo walkthrough](DEMO.md) ·
-[Recorded run evidence](assets/cutaway-run.json)
+[Architecture and sequence diagrams](ARCHITECTURE.md) ·
+[Recorded run evidence](assets/cutaway-run.json) · [Submission notes](SUBMISSION.md)
 
 ![Fieldnote with Cutaway available to a signed-in operator](assets/cutaway-host.png)
 
 ## Run the demo
 
-Node **22** and Docker are required. Use the checked-in `.nvmrc`; on the prepared
+Node **22** and a running Docker daemon are required. Clone with an account that
+has access to this repository. Use the checked-in `.nvmrc`; on the prepared
 Mac, `export PATH="/opt/homebrew/opt/node@22/bin:$PATH"` selects the installed version.
 
 ```bash
+git clone https://github.com/Agents-Everywhere/CutAway.git
+cd CutAway
 npm ci
 cp .env.example .env
 # Configure the provider keys and an operator password described below.
@@ -59,23 +64,41 @@ Stop the dev command with Ctrl+C to stop its owned services.
 
 ## Check the code
 
+Start Docker and build the `cutaway-codex-worker` image with the setup command
+above before running the checks; the booking tests use real containers. The
+automated suite needs no provider API keys. Recording tools such as FFmpeg and
+Playwright/Chromium are optional.
+
 ```bash
 npm run verify:cutaway
 ```
 
-This runs strict workspace types, tests, lint and production builds. Independent
-booking checks use real HTTP requests and inspect SQLite directly: two customers
+The final build passed **113 tests**, strict workspace types, lint and production
+builds. Run the command above to repeat those checks. Independent booking checks use real HTTP requests and inspect SQLite directly: two customers
 for one place, three for three places, full-capacity rejection and exact preservation
 of the existing record. A frontend-only or reject-all workaround cannot pass.
+The [GitHub Actions workflow](.github/workflows/verify.yml) is configured to build
+the Docker test image and run these checks plus the structural spec audit on
+pushes and pull requests; its run result is reported by GitHub.
+
+## Why put the coding agent in the app?
+
+Without Cutaway, a conventional bug repair workflow often starts with a ticket,
+followed by reproduction, code changes, review, tests, deployment and a live
+check. Cutaway gives the repair agent the selected page, workshop record and
+source binding directly. The operator can inspect evidence and try the candidate
+in the same app, then decide when to Apply. Team review and release requirements
+remain part of each host integration.
 
 ## How it works
 
-The Next.js/CopilotKit shell holds context, conversation and voice. A small local
-controller starts a fresh Codex SDK worker in Docker with only candidate source
+The Next.js/CopilotKit shell holds selected page/record context, conversation and
+voice while the host app remains visible. A small local controller starts a fresh Codex SDK worker in Docker with only candidate source
 mounted for editing. The controller owns checks, preview data, the verified source
 identity and target restart. The worker cannot Apply or access the active database,
 provider work-order credentials, this implementation spec or protected checks.
 
+- [Architecture, trust boundaries and repair sequence](ARCHITECTURE.md)
 - [Fieldnote source and endpoints](examples/fieldnote/README.md)
 - [Independent checks](packages/cutaway-checks/README.md)
 - [Design and limits](Cutaway-OpenSpec/openspec/changes/build-cutaway-in-app-repair/design.md)
@@ -84,13 +107,14 @@ provider work-order credentials, this implementation spec or protected checks.
 
 ## Integrate another app
 
-Supply the host app's source, page/record context, independent behavior checks,
-and build/start/restart adapter. The current integration is a web app using a
-small postMessage connector; it can be adapted to other web frameworks. Cutaway's
+Supply the host app's authorization, source, page/record context, independent
+behavior checks, and build/start/restart adapter. The current integration is a
+web app using a small postMessage connector; it can be adapted to other web frameworks. Cutaway's
 shell, conversation, coding worker and approval flow are the reusable layer.
-Fieldnote-specific booking fixtures/checks are the sample adapter, not a claim that
-all apps are booking apps. Other applications need their own integration and checks;
-this repository currently demonstrates one host end to end.
+Fieldnote's booking fixtures and checks are the sample host adapter. The same
+repair flow is designed to connect to other apps through their own adapters; this
+repository demonstrates Fieldnote end to end, with integration work required for
+each additional host.
 
 Use the host app's authentication and operator permissions to decide who can
 access Cutaway. This demo uses a shared staff password and signed, expiring

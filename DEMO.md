@@ -6,7 +6,7 @@ independent checks, offers a preview and asks for approval before applying the
 exact tested version.
 
 The [final video](assets/cutaway-demo.mp4) is **118 seconds (1:58)**. It starts
-with that purpose, compares the usual ticket-to-deployment workflow, then
+with that purpose, compares a conventional workflow **without Cutaway**, then
 follows one operator through a real repair. The
 [run proof](assets/cutaway-run.json) records the actual candidate, four checks,
 deployment and new Ambiguous task. Use the [README](README.md#run-the-demo) to
@@ -14,24 +14,62 @@ run the app and the
 [script](Cutaway-OpenSpec/openspec/changes/build-cutaway-in-app-repair/demo-script.md)
 for the narration and evidence timings.
 
+## Video description
+
+**Cutaway — fix bugs from inside the live app**
+
+You’re using an app and discover a bug. Usually, fixing it means explaining the
+problem in a ticket, helping someone reproduce it, and moving through code
+changes, testing and deployment. Cutaway brings that repair workflow directly
+into the app.
+
+Cutaway is an embedded coding agent for authorized operators. Select the affected
+part of the page, then type or speak to investigate the problem and request a fix.
+Cutaway receives the page and record context, reproduces the bug, edits real
+source code in an isolated worker, and runs independent checks.
+
+In this demo, a Fieldnote Studio operator discovers that two customers can book
+the last available pottery place. Someone could arrive expecting a seat that
+doesn’t exist. Watch the operator investigate, review the repair, try it in an
+interactive Preview with separate test data, and explicitly approve the tested
+version for the live app. Fieldnote restarts with Morgan’s existing reservation
+preserved, while Cutaway’s conversation stays open.
+
+Afterward, the operator saves the verified result to Ambiguous, where it can
+support manager reviews, booking checks and customer updates through connected
+workflows.
+
+Fieldnote is the first integration. Cutaway is designed to work across apps
+through host-specific context, permissions, checks and deployment adapters.
+Regular visitors use the app normally; repair controls and APIs are restricted
+to authorized operators.
+
 ## What the viewer sees
 
-| Step               | Action and proof                                                                                                                                 |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Understand Cutaway | Investigation, source repair, tests and approval are stated first; text and voice are both supported                                             |
-| Compare workflows  | A typical repair moves through a ticket, reproduction, code review, tests and deployment; Cutaway supplies the selected page and record directly |
-| Report the bug     | A signed-in Fieldnote operator selects availability and types the request; customers do not get repair controls                                  |
-| Reproduce it       | Two confirmations and two database rows for one remaining place                                                                                  |
-| Ask by voice       | Real push-to-talk asks “What changed?”, calls `read_task` and receives the actual Realtime answer                                                |
-| Check the repair   | Four checks outside the coding worker verify capacity, valid bookings, full-capacity rejection and Morgan's original record                      |
-| Try it first       | Preview is explicitly not live; Avery's test booking appears there while Current still contains only Morgan                                      |
-| Apply              | The enabled approval identifies the exact tested version; Fieldnote restarts and Morgan's booking remains                                        |
-| Share the result   | Optional Save report creates a new Ambiguous task and reads the verified report back                                                             |
+| Step               | Action and proof                                                                                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Understand Cutaway | Investigation, source repair, tests and approval are stated first; text and voice are both supported                                                                   |
+| Compare workflows  | Without Cutaway, a conventional repair moves through a ticket, reproduction, code review, tests and deployment. Cutaway supplies the selected page and record directly |
+| Report the bug     | A signed-in Fieldnote operator selects availability and types the request; customers do not get repair controls                                                        |
+| Reproduce it       | Two confirmations and two database rows for one remaining place                                                                                                        |
+| Ask by voice       | Real push-to-talk asks “What changed?”, calls `read_task` and receives the actual Realtime answer                                                                      |
+| Check the repair   | Four checks outside the coding worker verify capacity, valid bookings, full-capacity rejection and Morgan's original record                                            |
+| Try it first       | Preview is explicitly not live; Avery's test booking appears there while Current still contains only Morgan                                                            |
+| Apply              | The enabled approval identifies the exact tested version; Fieldnote restarts and Morgan's booking remains                                                              |
+| Share the result   | Optional Save report creates a new Ambiguous task and reads the verified report back                                                                                   |
 
-The comparison concerns context reconstruction and handoffs. It does not promise
-to remove a team's production review requirements or imply instant repairs.
+The unchanged narration says “A typical repair starts with a ticket.” That
+phrase describes the **without Cutaway** example; the following sentence
+introduces Cutaway. This written comparison makes that distinction explicit. It concerns
+context reconstruction and handoffs: the agent receives the selected app context
+and performs the investigation and source repair while the operator retains
+Preview and approval. Team production reviews remain a host-specific requirement;
+the film does not claim instant repairs.
 
 ## How it works
+
+See the [architecture and sequence diagrams](ARCHITECTURE.md) for the host adapter,
+protected checks, data separation and approval boundary.
 
 The Next.js/CopilotKit shell keeps selected page context, conversation and voice
 beside the host app. A fresh Codex SDK worker edits candidate source in Docker.

@@ -1,154 +1,102 @@
-# Cutaway submission notes
+# Cutaway
 
-**Cutaway — fix the app without leaving it.**
+**Investigate and fix bugs inside the app you’re using.**
 
-The final [video](assets/cutaway-demo.mp4) is **118 seconds (1:58)**. It shows a
-real typed repair request and voice follow-up, readable evidence, a preview,
-explicit Apply and a new Ambiguous report. Full decoding, encoded-audio
-transcription and frame review passed. The app view stays fixed, and every
-interaction plays at original speed; one labelled break omits 4m48s of worker
-waiting. Publication and event submission remain separate actions.
+[Watch the 1:58 demo](assets/cutaway-demo.mp4) · [Run the app](README.md#run-the-demo) ·
+[Inspect the recorded proof](assets/cutaway-run.json) ·
+[GitHub repository](https://github.com/Agents-Everywhere/CutAway)
+
+The repository is currently private. Public access and event submission remain
+pending; a private repository does not yet satisfy the public-repository deliverable.
 
 ## Project description
 
-Cutaway lets authorized operators investigate and fix bugs from inside the app
-they're using, by typing or speaking. It edits real source code, tests the
-repair outside the coding worker, offers a preview and asks for approval before
-applying the exact verified version. The conversation stays open while the app
-restarts against its existing data.
+Cutaway is a coding agent embedded in an existing app for its operators. An
+operator selects the part that looks wrong and asks for help by typing or
+speaking. Cutaway reproduces the issue, changes real source code in an isolated
+worker and runs independent checks that the worker cannot edit. The operator
+can try a Preview before approving the exact tested build. The app restarts
+with its existing data while the conversation stays open.
 
-In Fieldnote Studio, two customers can book the last pottery place. The operator
-selects the workshop's availability and asks Cutaway to reproduce and repair the
-bug without losing Morgan's booking. Preview uses separate test data; the update
-becomes live only after Apply. Afterward, the operator can create an Ambiguous
-task containing the verified result and read it back. No preseeded task is
-needed.
+Our first host is Fieldnote Studio. Two customers can book the last pottery
+place, leaving someone without a seat. Cutaway repairs that race while keeping
+Morgan’s existing reservation. After Apply, the operator can create an Ambiguous
+task containing the result and verify it by reading the same task back. The
+problem starts in the app; no ticket or preseeded task is needed.
 
-Fieldnote is the first host integration. Other apps supply authorized access,
-page/record context, source, independent checks and a build/restart adapter.
-
-## Who it helps and why the app matters
-
-Visitors use Fieldnote without an active repair panel. An authorized operator
-signs in to use Cutaway inside the same app. The demo adds a simple
-password/signed-session gate; another host should use its own identity and
-operator permissions. Five focused access tests, actual request checks and an
-independent substantive review passed.
-
-The operator is responsible for workshop bookings and wants to stop promising
-the same place twice. Selecting the actual availability indicator gives Cutaway
-the workshop, element and source binding. The operator discovers the problem in
-the app and supplies the repair request directly. Preview and approval happen
-beside the app the operator already recognizes, with the existing customer
-record visible before and after repair.
-
-## Technology and attribution
-
-| Technology                          | Contribution                                                             |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| CopilotKit                          | Existing web shell, page context, agent tools and controlled UI          |
-| OpenRouter                          | Configured Muse model for chat and runtime coding                        |
-| OpenAI                              | Codex SDK worker integration and separate Realtime voice                 |
-| Ambiguous AI                        | Optional task creation after repair, with a verified report and readback |
-| React/Next.js, Vite, SQLite, Docker | Application UI, target build/data and isolated execution                 |
-
-Inherited infrastructure comes from CopilotKit's MIT-licensed Agents, Everywhere
-starter at `86f547d74e8bd32e047226b0e1fb862cca02a5c7`: model adapters, web
-runtime/context patterns, voice connection and approved workplace adapter.
-Cutaway adds [Fieldnote](examples/fieldnote/README.md), the repair
-controller/worker, protected booking checks, candidate preview, explicit Apply,
-restart/context restoration and the repair-report handoff. The original
-[LICENSE](LICENSE) remains. Source implementation and runtime repairs are
-AI-assisted.
+Other hosts provide authorized access, page/record context, source, independent
+checks and build/restart behavior. Fieldnote demonstrates that contract end to
+end and provides a working example for the next integration.
 
 ## Evidence for the judging criteria
 
-| Official criterion                | Cutaway evidence                                                                                                                                                     |
-| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Core Requirements & Functionality | Real selection → request → reproduction → source repair → checks → preview → Apply → restored app → optional new-task report readback                                |
-| Innovation & Theme Alignment      | The coding agent starts from the current app element and workshop; the host app remains the main surface                                                             |
-| Technical Execution & Integration | Isolated worker, independent HTTP/SQLite checks, separate preview data, exact-candidate approval and verified task persistence; 113 tests and production builds pass |
-| Usefulness & Agentic Experience   | The operator can inspect and try a repair, decides when to apply it, keeps existing bookings and can share the result in a new team task                             |
+| Criterion                         | Demonstrated evidence                                                                                                                           |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core Requirements & Functionality | Selection → typed request → reproduced race → source repair → voice follow-up → checks → Preview → Apply → restored app → optional task handoff |
+| Innovation & Theme Alignment      | The operator's selected page, record and source binding supply context inside the app where the problem appears                                 |
+| Technical Execution & Integration | Isolated worker, direct HTTP/SQLite verification, separate Preview data, source/build-bound approval and actual Ambiguous creation/readback     |
+| Usefulness & Agentic Experience   | The operator tries and approves the repair, existing bookings survive, and the verified result can be shared with the team                      |
 
-Final successful run: `72d41994-606c-4b35-8f33-bb242fa34a18`. Applied candidate:
-`02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d`. After Apply,
-Save report created new Ambiguous task `6e16a5d1-fcd1-40de-af1b-4c92011eede1`;
-its report was read back at `2026-09-12T19:03:23.866Z`. The provider returned no
-URL, so no task link is invented here.
+`npm run verify:cutaway` passed strict workspace types, **113 tests**, lint and
+both production builds at `c9ad60c`. Independent reviews covered access,
+controller lifecycle, model context and the final UI. The full booking tests
+require Docker and the worker image; no provider keys are needed for that suite.
+A clean-clone quickstart rehearsal is still outstanding.
 
-## Repository readiness
+The recorded run is `72d41994-606c-4b35-8f33-bb242fa34a18`, with applied source
+`02dbc23e452297cc827e7fe059ee5878b1d5856f4c659268b3b953b43a12b09d`.
+Its four checks passed and the existing record was preserved. Save report
+created Ambiguous task `6e16a5d1-fcd1-40de-af1b-4c92011eede1`; readback completed
+at `2026-09-12T19:03:23.866Z`. The provider returned no task URL.
 
-- [x] README explains setup, accounts, start/reset, architecture and
-      limitations.
-- [x] `npm run verify:cutaway` passes strict types, 113 tests, lint and both
-      production builds.
-- [x] Whole-change code and restart review returned GREEN.
-- [x] `.env`, local tokens, generated databases, candidate source and raw
-      recordings are ignored.
-- [x] Synthetic data, local update scope and other-app integration work are
-      described.
-- [ ] Rehearse the published repository quickstart from a clean clone.
-- [ ] Publish the intended project repository and record its public URL.
+## Technology and attribution
 
-## Demo delivery
+| Technology                              | Role in Cutaway                                                        |
+| --------------------------------------- | ---------------------------------------------------------------------- |
+| CopilotKit                              | Conversational UI, page context and model-callable actions             |
+| OpenRouter                              | Configured Muse model for chat and source repair                       |
+| OpenAI                                  | Codex SDK worker integration and Realtime voice                        |
+| Ambiguous AI                            | Optional new task containing the completed repair and measured results |
+| React, Next.js, Vite, SQLite and Docker | Host UI, builds, persistent bookings and isolated execution            |
 
-- [x] Capture the final workflow: bug discovered in Fieldnote, real source
-      repair, then optional new Ambiguous task creation and readback.
-- [x] Show Fieldnote before opening Cutaway; preserve the distinction between
-      host and assistant.
-- [x] Show operator review, usable preview, explicit Apply and the resulting
-      update to the running app.
-- [x] Prepare plain-language narration and proof shots covering the five
-      requested review criteria.
-- [x] Verify the visitor/operator access gate: five focused tests, actual denied
-      requests, successful login and independent review.
-- [x] Include the captured real operator sign-in in the final edit.
-- [x] Validate the 118-second readable video: full decoding, encoded narration
-      and fixed-frame visual continuity passed.
-- [x] Deliver [assets/cutaway-demo.mp4](assets/cutaway-demo.mp4) and
-      [curated run proof](assets/cutaway-run.json). Public publication remains a
-      separate action.
+Cutaway builds on CopilotKit's MIT-licensed Agents, Everywhere starter at
+`86f547d74e8bd32e047226b0e1fb862cca02a5c7`. Inherited pieces include model
+adapters, web runtime/context patterns, voice connection and the workplace
+adapter. Cutaway adds Fieldnote, operator access, the controller/worker,
+protected booking checks, Preview, explicit Apply, context restoration and the
+post-repair handoff. The original [LICENSE](LICENSE) remains. Implementation
+and runtime repairs are AI-assisted.
 
-The camera uses a fixed full-frame view with no zoom, timelapse, replay or
-inserted freeze. One labelled editorial break skips inactive worker waiting.
-Coral provides the brighter stock narration, paced at 1.12× for the edit. The
-real voice exchange is unaltered: a stock macOS Samantha question is supplied
-only while actual push-to-talk is pressed, and the answer comes from the live
-OpenAI Realtime session using Marin. No human-recorded operator voice or
-subjective listening review is claimed.
+## Demo scope
 
-The scenario represents the studio's live app. Execution is local and bookings
-are synthetic; no public production hosting, payment or customer email is
-claimed. The conventional workflow comparison concerns context reconstruction
-and handoffs, not a promise to remove a team's production review requirements.
+The film shows the workflow of a studio's live app. Execution is local and the
+bookings are synthetic; no public hosting, payment or customer email is claimed.
+Only signed-in operators receive Cutaway, enforced by server-side sessions as
+well as the UI. Another host should use its own operator identity and roles.
 
-## From repair to team follow-up
+All app interactions play at original speed in a fixed view. One labelled break
+omits 4m48s of worker waiting. The push-to-talk exchange uses the running voice
+integration and an actual OpenAI Realtime answer. See [DEMO.md](DEMO.md) for
+recording and narration details.
 
-The verified Ambiguous report can feed a manager’s review, a booking check or an
-update for affected customers. This is the purpose of the existing report
-handoff: carry the repair evidence into the team’s work. The demo proves
-creation and readback of the task; those downstream actions are not shown
-executing.
+The Ambiguous task can support a manager's review, booking checks or customer
+updates. The demo proves the report handoff; it does not execute those downstream
+actions or replace a team's production review requirements.
 
-## Publication and event checks
+## Remaining submission steps
 
-The team must confirm its city-specific event window and eligibility against the
-[organizer guidance](hackathon-rules.md). The implementation notes distinguish
-inherited code from Cutaway work; they do not establish the organizer's official
-build window.
-
-- [ ] Confirm build eligibility and the local submission deadline.
-- [ ] Inspect final public files and the movie for secrets before publishing.
-- [ ] Publish the repository and video, then insert their actual links.
-- [ ] Add sponsor handles required by the local organizer and publish the social
-      post.
+- [ ] Confirm the local event window, eligibility and deadline against the
+      [organizer guidance](hackathon-rules.md).
+- [ ] Rehearse the repository quickstart from a clean clone.
+- [ ] Make the intended repository and video publicly accessible.
+- [ ] Publish the social post with the handles required by the local organizer.
 - [ ] Submit through the participant portal and retain its confirmation.
 
-Draft social copy, to accompany the real repository and video links:
+Draft social copy:
 
-> We built Cutaway for Agents, Everywhere: a coding agent inside an app you
-> already use. In our Fieldnote demo, it reproduces a double booking, edits the
-> source, runs independent checks and offers a preview. The operator approves
-> the update to the live app; existing bookings survive. After the repair, the
-> operator can create an Ambiguous task with the verified result. Built with
-> CopilotKit, OpenRouter and OpenAI, with Ambiguous for the work-order handoff.
+> We built Cutaway for Agents, Everywhere: a coding agent inside the app you’re
+> already using. In Fieldnote, it reproduces a double booking, repairs the source
+> and runs independent checks. The operator tries a preview and approves the
+> update; existing bookings survive. A verified Ambiguous task carries the result
+> to the team. Built with CopilotKit, OpenRouter and OpenAI, with Ambiguous for the
+> handoff.
